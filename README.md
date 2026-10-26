@@ -75,3 +75,12 @@ Format Word meniru artikel acuan *Agentic Coding* dengan kertas A4. Builder tida
 ## Aturan artikel
 
 Aturan lengkap ada di `skills/socs-article-writer/references/aturan.md`. Contoh artikel yang sudah terbit ada di `skills/socs-article-writer/references/pola-artikel-terbit.md`.
+
+## Kredit
+
+Aturan gaya menulis anti-slop di `skills/socs-article-writer/references/gaya-menulis.md` adalah adaptasi dari dua proyek open source berlisensi MIT:
+
+- [stop-slop](https://github.com/hardikpandya/stop-slop) oleh Hardik Pandya: aturan level kalimat dan prosa (kontras biner, agency palsu, passive voice, throat-clearing, adverb, ritme, skoring self-check).
+- [anti-slop](https://github.com/miqdadbadjuber/anti-slop) oleh Miqdad Badjuber: prinsip filter kejujuran konten (tanpa statistik atau klaim tanpa bukti, tanpa jargon marketing) dan pendekatan "filter, bukan style guide".
+
+Keduanya diadaptasi ke Bahasa Indonesia untuk konteks artikel SOCS BINUS; rincian adaptasi ada di `skills/socs-article-writer/references/sumber-gaya.md`.

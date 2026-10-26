@@ -35,6 +35,37 @@ OVERCLAIM = re.compile(
     r"\b(mewajibkan|menjamin|dijamin|terjamin|seratus persen|sempurna|terbukti|membuktikan|pasti)\b|100\s*%",
     re.IGNORECASE,
 )
+# --- Gaya anti-slop (references/gaya-menulis.md) ---
+EM_DASH = re.compile(r"\u2014")
+INTENSIFIERS = re.compile(
+    r"\b(sangat|benar-benar|secara harfiah|sungguh|mendasar|secara signifikan|secara fundamental)\b",
+    re.IGNORECASE,
+)
+FILLER_PHRASES = re.compile(
+    r"\b(di era digital ini|seiring berkembangnya zaman|tak dapat dipungkiri|perlu diketahui bahwa|"
+    r"pada intinya|tidak bisa dipungkiri|tak bisa dipungkiri)\b",
+    re.IGNORECASE,
+)
+META_COMMENTARY = re.compile(
+    r"\b(di bagian ini,? kita akan|seperti yang akan kita lihat|seperti yang sudah kita lihat|"
+    r"mari kita bahas|berikut penjelasannya|itu adalah bahasan lain)\b",
+    re.IGNORECASE,
+)
+BINARY_CONTRAST = re.compile(
+    r"\b(bukan (?:sekadar|sekedar|hanya)[^.\n]{0,60}melainkan|bukan[^.\n]{0,60},? (?:melainkan|tetapi justru))\b",
+    re.IGNORECASE,
+)
+EMPTY_DECLARATIVE = re.compile(
+    r"\b(dampaknya (?:sangat )?besar|alasannya (?:bersifat )?struktural|taruhannya tinggi|"
+    r"implikasinya (?:sangat )?signifikan)\b",
+    re.IGNORECASE,
+)
+FALSE_AGENCY = re.compile(
+    r"\b((?:keputusan|kebiasaan|tren|budaya)\s+(?:yang\s+)?muncul|"
+    r"data\s+(?:memberi tahu|berbicara)|pasar\s+(?:memberi reward|menghargai))\b",
+    re.IGNORECASE,
+)
+SWEEPING = re.compile(r"\b(semua orang|semua orang tahu|tidak ada yang tahu)\b", re.IGNORECASE)
 
 
 def clean_words(text):
@@ -249,6 +280,36 @@ def main():
     for i, l in enumerate(raw_lines):
         if re.match(r"^\s*Table\s+\d+[.:]", l):
             add("Low", f"Baris {i + 1}: caption tabel 'Table N.' tidak diatur, sebaiknya dihapus.")
+
+    # --- Gaya anti-slop (references/gaya-menulis.md) ---
+    slop_patterns = (
+        (BINARY_CONTRAST, "kontras biner gimmick 'bukan X, melainkan Y'; tulis Y langsung"),
+        (FILLER_PHRASES, "pembuka basa-basi (throat-clearing); hapus, langsung ke inti"),
+        (META_COMMENTARY, "meta-komentar; artikel tidak perlu menceritakan strukturnya sendiri"),
+        (FALSE_AGENCY, "agency palsu: benda mati melakukan aksi manusia; sebut pelakunya"),
+        (EMPTY_DECLARATIVE, "declaratif kosong; sebut hal spesifik yang dimaksud"),
+        (SWEEPING, "klaim melang; pakai spesifik, bukan 'semua orang'"),
+        (INTENSIFIERS, "intensifier kosong; hapus atau ganti dengan data spesifik"),
+    )
+    slop_first = None
+    for i, l in enumerate(raw_lines):
+        for pat, hint in slop_patterns:
+            m = pat.search(l)
+            if m and slop_first is None:
+                slop_first = (pat, hint)
+            while m:
+                add("Low", f"Baris {i + 1}: gaya anti-slop, {hint}. Temuan: \"{m.group(0).strip()}\".")
+                m = pat.search(l, m.end())
+    if slop_first:
+        add(
+            "Low",
+            "Cek gaya lengkap ada di references/gaya-menulis.md (skoring self-check 5 dimensi).",
+        )
+    for i, l in enumerate(raw_lines):
+        m = EM_DASH.search(l)
+        if m:
+            add("Medium", f"Baris {i + 1}: em dash (—) dilarang; pakai koma, titik, atau tanda kurung.")
+
 
     # --- Keyword ---
     keywords = [k.strip() for k in args.keywords.split(",") if k.strip()]

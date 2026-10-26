@@ -89,6 +89,8 @@ Figure N. Deskripsi singkat gambar
 - Bahasa Indonesia ragam populer-ilmiah: santai tapi kredibel. Bukan bahasa skripsi, bukan slang.
 - Istilah teknis tetap Inggris, misalnya cloud, framework, deploy, open source, pipeline.
 - Pakai "kamu" dan "kita". Jangan pakai "Anda" (Low).
+- Tanpa em dash (—). Pakai koma, titik, atau tanda kurung (Medium). Pemisah byline tetap en dash `–`.
+- Gaya anti-slop: hindari pola tulisan AI seperti kontras biner gimmick ("bukan sekadar X, melainkan Y"), pembuka basa-basi ("tak dapat dipungkiri", "di era digital ini"), meta-komentar ("di bagian ini kita akan ..."), intensifier kosong ("sangat", "sebenarnya", "benar-benar"), declaratif kosong ("dampaknya sangat besar" tanpa menyebut spesifiknya), dan klaim melang ("selalu", "semua orang"). Daftar lengkap dan cara memperbaikinya ada di `gaya-menulis.md` (temuan validator: Low, kecuali em dash: Medium).
 - Boleh analogi sehari-hari dan pertanyaan retoris.
 - Tanpa blok kode. Artikel ini explainer, bukan tutorial (Low).
 - Target pembaca: mahasiswa Informatika dan developer pemula.
@@ -150,6 +152,7 @@ Penulis: [Nama], [Gelar] – [Jabatan]
 - [ ] 3 sampai 7 referensi, satu per baris, masing-masing punya tahun dan URL.
 - [ ] Buku klaim ada, setiap angka berstatus Terverifikasi, dan sumbernya ada di Referensi.
 - [ ] Tidak ada typo atau spasi yang hilang (misalnya "eksekusi(https").
+- [ ] Gaya lolos cek anti-slop: tanpa em dash, tanpa kontras biner gimmick, tanpa throat-clearing, tanpa intensifier kosong (lihat `gaya-menulis.md`).
 - [ ] Topik belum pernah ditulis di situs.
 - [ ] `.docx` sudah dibuat dengan `build_docx.py` dan dibuka untuk dicek.
 

@@ -7,7 +7,7 @@ description: Membantu menulis, merancang, memvalidasi, dan membuat file Word (.d
 
 Skill ini membantu user menyusun artikel untuk website SOCS BINUS dari nol sampai file Word siap ditinjau. Artikel terbit tetap dinilai dan disetujui manusia. Skill tidak mempublikasikan apa pun.
 
-Aturan lengkap ada di `references/aturan.md`. Contoh artikel terbit ada di `references/pola-artikel-terbit.md`. Template Markdown ada di `assets/template.md`. Semua path di bawah relatif terhadap folder skill ini.
+Aturan lengkap ada di `references/aturan.md`. Gaya menulis anti-slop ada di `references/gaya-menulis.md`. Contoh artikel terbit ada di `references/pola-artikel-terbit.md`. Template Markdown ada di `assets/template.md`. Semua path di bawah relatif terhadap folder skill ini.
 
 ## Langkah kerja
 
@@ -62,6 +62,7 @@ Susun kerangka berdasarkan urutan di `references/aturan.md` bagian 4 dan pola di
 ### 5. Tulis draft (Markdown)
 
 - Bahasa Indonesia ragam populer-ilmiah. Istilah teknis tetap Inggris.
+- Terapkan gaya anti-slop dari `references/gaya-menulis.md` saat menulis: langsung ke inti, tanpa kontras biner gimmick, tanpa throat-clearing, tanpa intensifier kosong, aktif voice dengan pelaku jelas, ritme kalimat bervariasi.
 - Target 600-700 kata. Batas keras 500-800.
 - Mulai dari `assets/template.md`, lalu isi sesuai outline.
 - Simpan draft sebagai `drafts/<judul>/<judul>.md`, dengan judul tanpa tanda `:` untuk nama file. Simpan gambar di folder yang sama, lalu tulis path relatif di Markdown, misalnya `![](figure-1.png)`.
@@ -75,7 +76,7 @@ Jalankan validator dari folder skill ini:
 
 - Perbaiki semua temuan High dan Medium, lalu jalankan ulang sampai tidak ada High.
 - Temuan Low dilaporkan ke user, dan diperbaiki jika mudah.
-- Validator memeriksa aturan mekanis, angka terhadap buku klaim, dan kata absolut. Ia tidak bisa memastikan sumber itu benar. Kebenaran klaim tetap dipastikan lewat buku klaim dan dicek manusia.
+- Validator memeriksa aturan mekanis, angka terhadap buku klaim, kata absolut, dan pola gaya anti-slop (em dash, kontras biner gimmick, throat-clearing, meta-komentar, declaratif kosong, klaim melang, intensifier kosong). Ia tidak bisa memastikan sumber itu benar. Kebenaran klaim tetap dipastikan lewat buku klaim dan dicek manusia.
 
 ### 7. Buat file Word
 
