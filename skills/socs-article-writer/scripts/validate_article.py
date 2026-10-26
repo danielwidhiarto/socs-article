@@ -2,7 +2,11 @@
 """Validasi draft artikel SOCS BINUS (format Markdown) terhadap references/aturan.md.
 
 Pemakaian:
-    python validate_article.py draft.md [--keywords "kata1,kata2"]
+    python validate_article.py draft.md [--keywords "kata1,kata2"] [--klaim klaim.md]
+
+Jika --klaim diberikan, angka ber-satuan (%, persen, ms, detik, GB, kali, dst.) di draft
+harus ada di baris buku klaim berstatus "Terverifikasi". Format tabel klaim:
+| No | Klaim | Jenis | URL sumber | Bukti | Status |
 
 Exit code: 0 jika tidak ada temuan High, 1 jika ada temuan High.
 Hanya memakai library standar Python.
@@ -23,6 +27,14 @@ URL = re.compile(r"https?://\S+")
 HEADING = re.compile(r"^(#{1,6})\s+(.*)$")
 TABLE_SEP = re.compile(r"^\s*\|?[\s:\-|]+\|?\s*$")
 LIST_ITEM = re.compile(r"^\s*([-*+]|\d+\.)\s+")
+MEASURE = re.compile(
+    r"(\d+(?:[.,]\d+)?)\s*(?:%|persen|ms|milidetik|detik|menit|jam|GB|MB|TB|kali|hari)(?![A-Za-z])",
+    re.IGNORECASE,
+)
+OVERCLAIM = re.compile(
+    r"\b(mewajibkan|menjamin|dijamin|terjamin|seratus persen|sempurna|terbukti|membuktikan|pasti)\b|100\s*%",
+    re.IGNORECASE,
+)
 
 
 def clean_words(text):
@@ -35,6 +47,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("draft")
     ap.add_argument("--keywords", default="", help="Keyword yang wajib muncul, dipisah koma")
+    ap.add_argument("--klaim", default="", help="Path buku klaim (klaim.md) untuk memeriksa angka")
     args = ap.parse_args()
 
     with open(args.draft, encoding="utf-8") as f:
@@ -247,6 +260,41 @@ def main():
         main_kw = keywords[0].lower()
         if not any(main_kw in h[1].lower() for h in h2h3 if h[0] == 2):
             add("Medium", f"Keyword utama '{keywords[0]}' belum ada di salah satu subjudul H2.")
+
+    # --- Kata absolut (overclaim): Low, minta diperhalus atau diberi sumber yang sekuat itu ---
+    for i, l in enumerate(raw_lines):
+        for m in OVERCLAIM.finditer(l):
+            add("Low", f"Baris {i + 1}: kata absolut '{m.group(0)}'. Perhalus, atau pastikan sumber memang mengatakannya sekuat itu.")
+
+    # --- Buku klaim: setiap angka ber-satuan harus Terverifikasi ---
+    def norm(num):
+        return str(float(num.replace(",", ".")))
+
+    draft_measures = {norm(m.group(1)) for m in MEASURE.finditer("\n".join(raw_lines))}
+    draft_shown = {norm(m.group(1)): m.group(1) for m in MEASURE.finditer("\n".join(raw_lines))}
+    if args.klaim:
+        with open(args.klaim, encoding="utf-8") as kf:
+            klaim_rows = [l.strip() for l in kf.read().splitlines() if l.strip().startswith("|")]
+        verified_text = ""
+        unverified = []
+        for row in klaim_rows:
+            cells = [c.strip() for c in row.strip("|").split("|")]
+            if len(cells) < 6 or not cells[0] or cells[0].lower() == "no" or set(cells[0]) <= set("-: "):
+                continue
+            claim_text, status = cells[1], cells[-1]
+            if status.lower() == "terverifikasi":
+                verified_text += " " + claim_text + " " + cells[4]
+            else:
+                unverified.append((cells[0], claim_text, status))
+        verified_measures = {norm(m.group(1)) for m in MEASURE.finditer(verified_text)}
+        for num in sorted(draft_measures - verified_measures):
+            add("Medium", f"Angka '{draft_shown[num]}' di draft tidak ada di buku klaim berstatus Terverifikasi.")
+        for no, claim_text, status in unverified:
+            nums = {norm(m.group(1)) for m in MEASURE.finditer(claim_text)}
+            if nums & draft_measures:
+                add("Medium", f"Klaim {no} berstatus '{status}' tetapi angkanya masih dipakai di draft: {claim_text[:60]}")
+    elif draft_measures:
+        add("Low", "Buku klaim tidak diberikan (--klaim); angka persen, ukuran, dan waktu tidak diperiksa mekanis.")
 
     # --- Laporan ---
     order = {"High": 0, "Medium": 1, "Low": 2}
