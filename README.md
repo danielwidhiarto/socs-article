@@ -10,12 +10,49 @@ Repo untuk menulis artikel teknologi untuk website SOCS BINUS: https://socs.binu
 
 ## Memasang skill
 
-Clone repo ini, lalu salin folder `skills/socs-article-writer` ke folder skills agent yang dipakai:
+Skill ini mengikuti standar [Agent Skills](https://agentskills.io): satu folder dengan `SKILL.md` (berisi `name` dan `description`), plus `references/`, `scripts/`, dan `assets/`. Standar ini dibaca oleh banyak agent, jadi cukup satu folder untuk semua agent.
 
-- Kiro: `.kiro/skills/` di workspace, atau `~/.kiro/skills/` untuk semua workspace.
-- Agent lain: cek lokasi skills di dokumentasi agent tersebut.
+Langkah umum:
 
-Skill mengikuti format Agent Skills (`SKILL.md` dengan `name` dan `description`), jadi bisa dibaca banyak agent.
+```
+git clone https://github.com/danielwidhiarto/socs-article.git
+cd socs-article
+```
+
+Lalu salin folder `skills/socs-article-writer` ke lokasi skills agent yang dipakai. Nama folder harus tetap `socs-article-writer`, karena harus sama dengan `name` di `SKILL.md`.
+
+| Agent | Lokasi di workspace (project) | Lokasi global (semua project) | Catatan |
+|---|---|---|---|
+| Kiro | `.kiro/skills/` | `~/.kiro/skills/` | Cek dengan `/context show`. |
+| Claude Code | `.claude/skills/` | `~/.claude/skills/` | Dibaca dari docs resmi. Perubahan di folder ini langsung terdeteksi dalam sesi. |
+| Codex (OpenAI CLI) | `.agents/skills/` | `~/.agents/skills/` | Codex juga membaca `~/.codex/skills/` di beberapa panduan lama. Cek dengan `/skills`. |
+| Gemini CLI | `.gemini/skills/` atau `.agents/skills/` | `~/.gemini/skills/` atau `~/.agents/skills/` | Lokasi `.agents/skills/` dipakai bersama agent lain. |
+| GitHub Copilot CLI | `.github/skills/`, `.claude/skills/`, atau `.agents/skills/` | `~/.copilot/skills/`, `~/.claude/skills/`, atau `~/.agents/skills/` | Lokasi `.claude/skills/` juga dibaca Copilot CLI. |
+| Oh My Pi (`omp`) | Belum diverifikasi | `~/.omp/agent/skills/` | Lokasi global dari panduan komunitas. Cek dokumentasi `omp` untuk lokasi project. |
+| Pi (`pi`) | `.agents/skills/` atau folder skill Pi | `~/.agents/skills/` | Pi juga membaca standar Agent Skills. |
+| Agent lain | Cek dokumentasi agent | Cek dokumentasi agent | Skill tetap bisa dipakai selama agent membaca standar Agent Skills. |
+
+Contoh pemasangan untuk satu project:
+
+- macOS, Linux, atau Git Bash di Windows:
+
+  ```
+  mkdir -p .agents/skills
+  cp -r skills/socs-article-writer .agents/skills/
+  ```
+
+- Windows PowerShell:
+
+  ```
+  New-Item -ItemType Directory -Force -Path .agents\skills | Out-Null
+  Copy-Item -Recurse skills\socs-article-writer .agents\skills\
+  ```
+
+Untuk Claude Code, ganti `.agents/skills` dengan `.claude/skills`. Untuk Kiro, ganti dengan `.kiro/skills`. Untuk pemasangan global, pakai folder home (misalnya `~/.agents/skills`).
+
+Setelah disalin, mulai sesi agent yang baru (atau jalankan reload jika agent mendukungnya), lalu pastikan skill terbaca. Jika tidak terbaca, periksa bahwa `SKILL.md` ada di dalam `socs-article-writer` dan frontmatter-nya valid.
+
+Pemasangan lewat `npx skills add` juga tersedia untuk beberapa agent, tetapi belum diuji untuk repo ini. Pemasangan manual di atas adalah cara yang sudah dicek.
 
 ## Cara pakai
 
