@@ -27,6 +27,14 @@ Untuk memvalidasi draft secara manual (butuh Python 3, tanpa library tambahan):
 python skills/socs-article-writer/scripts/validate_article.py "drafts/<judul>.md" --keywords "kata1,kata2"
 ```
 
+Untuk membuat file Word dari draft Markdown (butuh `pip install python-docx==1.2.0`):
+
+```
+python skills/socs-article-writer/scripts/build_docx.py "drafts/<judul>/<judul>.md" "drafts/<judul>/<judul>.docx"
+```
+
+Format Word meniru artikel acuan *Agentic Coding* dengan kertas A4. Builder tidak memakai file artikel terbit, jadi repo ini tidak menyimpan contoh .docx apa pun.
+
 ## Aturan artikel
 
 Aturan lengkap ada di `skills/socs-article-writer/references/aturan.md`. Contoh artikel yang sudah terbit ada di `skills/socs-article-writer/references/pola-artikel-terbit.md`.

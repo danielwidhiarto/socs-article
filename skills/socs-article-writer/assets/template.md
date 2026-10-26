@@ -1,6 +1,8 @@
 # [Nama Teknologi]: [Tagline Menarik]
 
-Figure 1. [Deskripsi singkat gambar] ([URL sumber])
+![](gambar-figure-1.png)
+Figure 1. [Deskripsi singkat gambar]
+(https://url-sumber)
 
 [Hook: adegan atau masalah sehari-hari. Mulai dengan "Bayangkan ..." atau "Pernahkah kamu ...?"]
 
@@ -12,18 +14,21 @@ Figure 1. [Deskripsi singkat gambar] ([URL sumber])
 
 ## Bagaimana [Nama Teknologi] Bekerja?
 
-- [Istilah 1] - [penjelasan singkat]
-- [Istilah 2] - [penjelasan singkat]
-- [Istilah 3] - [penjelasan singkat]
-- [Istilah 4] - [penjelasan singkat]
+[Pengantar singkat, diakhiri dengan titik dua jika diikuti daftar:]
 
-Figure 2. [Deskripsi alur atau arsitektur] ([URL sumber])
+- **[Istilah 1]:** [penjelasan singkat]
+- **[Istilah 2]:** [penjelasan singkat]
+- **[Istilah 3]:** [penjelasan singkat]
+
+![](gambar-figure-2.png){w=14.3cm}
+Figure 2. [Deskripsi alur atau arsitektur]
+(https://url-sumber)
 
 ## Contoh Penggunaan di Dunia Nyata
 
-- [Skenario 1 dengan produk atau perusahaan yang dikenal]
-- [Skenario 2]
-- [Skenario 3]
+[Skenario 1 dengan produk atau perusahaan yang dikenal.]
+
+[Skenario 2.]
 
 [Satu angka riset atau ukuran nyata, dengan pemilik temuannya disebut secara natural.]
 
@@ -47,6 +52,6 @@ Penulis: [Nama], [Gelar] – [Jabatan]
 
 ## Referensi
 
-[Penyedia]. ([Tahun]). [Judul]. [URL]
-[Penyedia]. ([Tahun]). [Judul]. [URL]
-[Penyedia]. ([Tahun]). [Judul]. [URL]
+[Penyedia]. ([Tahun]). *[Judul]*. [URL]
+[Penyedia]. ([Tahun]). *[Judul]*. [URL]
+[Penyedia]. ([Tahun]). *[Judul]*. [URL]

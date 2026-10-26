@@ -1,6 +1,6 @@
 # Aturan Artikel SOCS BINUS
 
-Ini satu-satunya sumber aturan untuk skill ini. Contoh artikel terbit ada di `pola-artikel-terbit.md` dan hanya perlu dibaca saat butuh contoh.
+Ini satu-satunya sumber aturan untuk skill ini. Contoh artikel terbit ada di `pola-artikel-terbit.md` dan hanya perlu dibaca saat butuh contoh. Format dokumen Word mengikuti artikel acuan *Agentic Coding* (lihat bagian 15), dengan kertas A4.
 
 Tingkat keparahan: High = artikel gagal validasi. Medium = wajib diperbaiki. Low = saran.
 
@@ -20,7 +20,7 @@ Tingkat keparahan: High = artikel gagal validasi. Medium = wajib diperbaiki. Low
   - Bagus: `Deno vs Node.js: Siapa Raja Baru Dunia JavaScript?`
   - Hindari: `Pengenalan Smart Contract`
 - Judul di baris pertama artikel harus sama persis dengan judul yang dipilih user (High jika tidak).
-- Nama file: judul tanpa `:` dan tanpa `_`, ganti dengan spasi. Contoh: `Smart Contract Kode yang Bisa Berjanji.md`.
+- Nama file: judul tanpa `:` dan tanpa `_`, ganti dengan spasi. Contoh: `Smart Contract Kode yang Bisa Berjanji.docx`.
 
 ## 3. Hook pembuka
 
@@ -35,7 +35,7 @@ Urutan wajib:
 1. Judul, lalu Figure 1 tepat di bawahnya.
 2. Hook (1 sampai 2 paragraf).
 3. Apa itu X: definisi dan asal-usul singkat (siapa dan tahun).
-4. Cara kerja atau fitur: bullet 4 sampai 6 poin, format `istilah - penjelasan`.
+4. Cara kerja atau fitur, dalam bentuk paragraf atau daftar bullet `- istilah: penjelasan`.
 5. Contoh penggunaan nyata: 3 sampai 4 skenario.
 6. Tabel (lihat bagian 7).
 7. Kelebihan dan keterbatasan, atau tantangan. Jujur dan spesifik, 2 sampai 4 poin.
@@ -51,29 +51,35 @@ Aturan tambahan:
 
 ## 5. Subjudul
 
-- Minimal 3 subjudul (High jika kurang). Di Markdown pakai `##` atau `###`.
-- Di dokumen Word, subjudul boleh berupa paragraf tebal pendek. Keduanya dihitung sama.
-- Satu subjudul H2 wajib memuat keyword utama.
+- Minimal 3 subjudul (High jika kurang). Di Markdown pakai `##`.
+- Di dokumen Word, subjudul adalah paragraf tebal, rata kiri-kanan, tanpa indent.
+- Satu subjudul memuat keyword utama.
 
 ## 6. Figure
 
-- Figure 1 wajib (Medium jika tidak ada).
+- Figure 1 wajib (Medium jika tidak ada), diletakkan di bawah judul.
 - Total 2 sampai 4 figure, dianjurkan (Low di luar itu).
-- Format caption, satu baris:
+- Tulis gambar dan caption dengan urutan ini:
 
 ```
-Figure N. Deskripsi singkat gambar (URL sumber)
+![](nama-file-gambar.png)
+Figure N. Deskripsi singkat gambar
+(URL sumber)
 ```
 
+- Caption memakai titik setelah nomor: `Figure N.` (Medium jika memakai titik dua).
+- Sumber harus di baris berikutnya dalam kurung: `(URL)` atau `(AI Generated)` (Medium jika tidak ada).
+- Lebar gambar default 14,3 cm. Untuk mengubah, tambahkan `{w=13.2cm}` setelah path. Tinggi mengikuti proporsi gambar kecuali ditambah `h=...cm`.
 - Penomoran berurutan mulai dari 1 tanpa lompatan (Medium).
-- URL sumber wajib. URL hanya boleh dari sumber yang sudah diverifikasi, tidak boleh karangan (High).
-- Gambar AI-generated boleh, dengan `(AI Generated)` sebagai pengganti URL. Caption tetap satu baris.
+- URL sumber wajib untuk gambar bukan AI-generated. URL hanya boleh dari sumber yang sudah diverifikasi, tidak boleh karangan (High).
+- Gambar AI-generated boleh dengan `(AI Generated)` sebagai pengganti URL.
 - Minimal satu figure harus dari sumber kredibel, bukan AI-generated.
 
 ## 7. Tabel
 
 - Satu tabel dianjurkan (Low jika tidak ada). Bukan wajib.
 - Untuk topik perbandingan, pakai format `Aspek | A | B` dengan 5 sampai 7 aspek.
+- Baris pertama tabel adalah header (tebal).
 - Caption tabel tidak diatur. Jangan pakai `Table N.` (Low).
 
 ## 8. Gaya dan bahasa
@@ -87,17 +93,24 @@ Figure N. Deskripsi singkat gambar (URL sumber)
 
 ## 9. Byline
 
-- Format satu baris: `Penulis: [Nama], [Gelar] – [Jabatan]`. Pakai en dash `–`.
+- Satu baris, persis seperti artikel acuan. Label `Penulis:` dan nama dicetak tebal:
+
+```
+Penulis: [Nama], [Gelar] – [Jabatan]
+```
+
+- Pemisah sebelum jabatan adalah en dash `–` dengan spasi di kiri dan kanan.
 - Nama, gelar, dan jabatan diambil dari input user. Agent wajib menanyakannya, jangan mengisi dari memori atau dari contoh.
 - Blok ini wajib ada di bagian penutup (Medium jika tidak ada atau formatnya salah).
 
 ## 10. Referensi
 
-- Heading `Referensi` berdiri sendiri. Entri mulai di baris berikutnya.
+- Heading `## Referensi` berdiri sendiri. Entri mulai di baris berikutnya.
 - Jumlah 3 sampai 7 (High jika kurang dari 3, Medium jika lebih dari 7). Ideal 3 sampai 5.
-- Satu entri per baris. Entri yang menempel dalam satu baris (Medium).
-- Format: `Penyedia. (Tahun). Judul. URL`. Nama penyedia tanpa kurung siku.
+- Satu entri per baris (Medium jika dua entri menempel dalam satu baris).
+- Format: `Penyedia. (Tahun). *Judul*. URL`. Judul dicetak miring. Nama penyedia tanpa kurung siku.
 - Setiap entri wajib punya tahun (Medium) dan URL (High).
+- URL di referensi menjadi hyperlink otomatis di dokumen Word.
 - Sumber kredibel: docs resmi, blog vendor besar (Google, IBM, Microsoft, AWS, NVIDIA), paper (arXiv, Nature), laporan riset (Gartner). Hindari Wikipedia sebagai sumber utama, blog anonim, dan agregator.
 - URL harus sudah diverifikasi (bisa dibuka) sebelum dimasukkan.
 
@@ -124,11 +137,31 @@ Figure N. Deskripsi singkat gambar (URL sumber)
 
 - [ ] Judul sama persis dengan judul yang dipilih, dan maksimal 10 kata.
 - [ ] Total kata 500 sampai 800, target 600 sampai 700.
-- [ ] Minimal 3 subjudul, satu H2 memuat keyword utama.
-- [ ] Figure 1 ada, penomoran berurutan, setiap caption punya URL atau `(AI Generated)`.
+- [ ] Minimal 3 subjudul, satu memuat keyword utama.
+- [ ] Figure 1 ada, penomoran berurutan, caption `Figure N.` dengan sumber `(URL)` atau `(AI Generated)` di baris berikutnya.
 - [ ] Tabel satu atau lebih, atau sudah dipertimbangkan.
-- [ ] Byline satu baris dengan format yang benar.
+- [ ] Byline satu baris: `Penulis: Nama, Gelar – Jabatan`.
 - [ ] 3 sampai 7 referensi, satu per baris, masing-masing punya tahun dan URL.
 - [ ] Setiap angka punya sumber di Referensi.
 - [ ] Tidak ada typo atau spasi yang hilang (misalnya "eksekusi(https").
 - [ ] Topik belum pernah ditulis di situs.
+- [ ] `.docx` sudah dibuat dengan `build_docx.py` dan dibuka untuk dicek.
+
+## 15. Format dokumen Word
+
+Dokumen dibuat oleh `scripts/build_docx.py` dan meniru artikel acuan *Agentic Coding*. Satu-satunya perbedaan: kertas dibuat A4 (acuan memakai US Letter).
+
+- Kertas A4. Margin 2,54 cm di semua sisi. Header dan footer 1,27 cm.
+- Font Times New Roman 12 pt, warna hitam. Spasi baris 1,5. Bahasa Indonesia (en-ID).
+- Semua paragraf memakai spasi otomatis (`beforeAutospacing` dan `afterAutospacing`), dengan nilai 5 pt sebelum dan sesudah. Spasi default sesudah paragraf 8 pt.
+- Judul: tengah, tebal, spasi baris 1,5 saja.
+- Isi: rata kiri-kanan, indent baris pertama 1,27 cm. Tidak diindent jika paragraf diakhiri `:` atau tepat setelah daftar. Aturan ini diambil dari perilaku artikel acuan.
+- Subjudul: tebal, rata kiri-kanan, tanpa indent.
+- Daftar: bullet dengan simbol Symbol, atau bernomor `1.`. Indent kiri 1,27 cm, menggantung 0,63 cm. Setiap daftar bernomor mulai dari 1.
+- Gambar: tengah. Lebar default 14,3 cm.
+- Caption: tengah, 11 pt. Sumber `(URL)` di bawahnya: tengah, 12 pt, URL menjadi hyperlink.
+- Tabel: gaya Grid Table Light (garis abu-abu BFBFBF), lebar otomatis, baris pertama tebal.
+- Referensi: heading tebal, entri rata kiri-kanan, judul miring, URL menjadi hyperlink dengan gaya Hyperlink (biru, garis bawah).
+- Byline: satu baris tebal, rata kiri-kanan.
+
+Catatan tentang artikel acuan (file *Agentic Coding* di folder `submitted`): isinya dobel, karena subjudul dan referensi muncul dua kali. Jangan memakainya sebagai acuan isi, hanya sebagai acuan format. Caption Figure 1-nya juga berbeda dari Figure 2 (ukuran dan spasi), dan itu tidak diikuti oleh builder.

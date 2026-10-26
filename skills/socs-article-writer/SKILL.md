@@ -1,13 +1,13 @@
 ---
 name: socs-article-writer
-description: Membantu menulis, merancang, dan memvalidasi artikel explainer teknologi Bahasa Indonesia untuk website SOCS BINUS (socs.binus.ac.id/category/article). Gunakan saat user ingin membuat, menulis, atau mengecek artikel SOCS, BINUS, atau draft artikel teknologi yang akan diajukan ke redaksi.
+description: Membantu menulis, merancang, memvalidasi, dan membuat file Word (.docx) untuk artikel explainer teknologi Bahasa Indonesia di website SOCS BINUS (socs.binus.ac.id/category/article). Gunakan saat user ingin membuat, menulis, mengecek, atau mengubah artikel SOCS, BINUS, atau draft artikel teknologi yang akan diajukan ke redaksi.
 ---
 
 # SOCS Article Writer
 
-Skill ini membantu user menyusun artikel untuk website SOCS BINUS dari nol sampai draft siap ditinjau. Artikel terbit tetap dinilai dan disetujui manusia. Skill tidak mempublikasikan apa pun.
+Skill ini membantu user menyusun artikel untuk website SOCS BINUS dari nol sampai file Word siap ditinjau. Artikel terbit tetap dinilai dan disetujui manusia. Skill tidak mempublikasikan apa pun.
 
-Aturan lengkap ada di `references/aturan.md`. Pola artikel yang sudah terbit ada di `references/pola-artikel-terbit.md`. Template kerangka ada di `assets/template.md`.
+Aturan lengkap ada di `references/aturan.md`. Contoh artikel terbit ada di `references/pola-artikel-terbit.md`. Template Markdown ada di `assets/template.md`. Semua path di bawah relatif terhadap folder skill ini.
 
 ## Langkah kerja
 
@@ -19,8 +19,9 @@ Pastikan informasi berikut sudah ada. Tanyakan yang belum ada, dan lewati yang s
 - Sudut pandang atau tagline (opsional). Jika tidak ada, buat 3 kandidat judul dengan format `Nama Teknologi: Tagline`.
 - Keyword wajib (opsional). Semua keyword harus muncul di artikel.
 - SDG (opsional). Jika tidak diminta, jangan dibahas.
-- Penulis: nama, gelar, dan jabatan. Wajib untuk byline. Jangan mengisi nama dari memori atau dari contoh di referensi.
+- Penulis: nama, gelar, dan jabatan. Wajib untuk byline. Tanyakan ketiganya, jangan mengisi dari memori atau dari contoh.
 - Gambar: sumber gambar jika user punya. Jika tidak, usulkan 2-3 gambar yang bisa dicari dari sumber resmi, atau ilustrasi AI-generated yang diberi label.
+- Folder kerja untuk draft dan gambar, misalnya `drafts/<judul>/`.
 
 ### 2. Cek duplikat
 
@@ -39,37 +40,43 @@ Pastikan informasi berikut sudah ada. Tanyakan yang belum ada, dan lewati yang s
 
 Susun kerangka berdasarkan urutan di `references/aturan.md` bagian 4 dan pola di `references/pola-artikel-terbit.md`. Tampilkan outline singkat ke user. Lanjut ke draft kecuali user minta meninjau outline dulu.
 
-### 5. Tulis draft
+### 5. Tulis draft (Markdown)
 
 - Bahasa Indonesia ragam populer-ilmiah. Istilah teknis tetap Inggris.
-- Target 600-700 kata (seluruh teks, seperti Word). Batas keras 500-800.
-- Mulai dari template di `assets/template.md`, lalu isi sesuai outline.
-- Gunakan `Figure N. Deskripsi (URL)` satu baris, dengan penomoran berurutan dari 1.
-- Simpan di `drafts/` dengan nama file judul tanpa tanda `:`, misalnya `drafts/Deno vs Node.js Siapa Raja Baru Dunia JavaScript.md`. Buat folder `drafts/` jika belum ada.
+- Target 600-700 kata. Batas keras 500-800.
+- Mulai dari `assets/template.md`, lalu isi sesuai outline.
+- Simpan draft sebagai `drafts/<judul>/<judul>.md`, dengan judul tanpa tanda `:` untuk nama file. Simpan gambar di folder yang sama, lalu tulis path relatif di Markdown, misalnya `![](figure-1.png)`.
+- Format figure (caption `Figure N.` dengan sumber di baris berikutnya), byline (satu baris), dan referensi harus persis seperti di `references/aturan.md`.
 
 ### 6. Validasi
 
-Jalankan validator dari root workspace:
+Jalankan validator dari folder skill ini:
 
     python scripts/validate_article.py "<path draft>.md" --keywords "keyword1,keyword2"
-
-Jalankan dari folder tempat skill ini dipasang (folder yang berisi SKILL.md). Path draft boleh absolut atau relatif terhadap folder kerja user.
 
 - Perbaiki semua temuan High dan Medium, lalu jalankan ulang sampai tidak ada High.
 - Temuan Low dilaporkan ke user, dan diperbaiki jika mudah.
 - Validator hanya memeriksa aturan mekanis. Kualitas tulisan, akurasi klaim, dan relevansi sumber tetap perlu dicek manusia.
 
-### 7. Serahkan ke user
+### 7. Buat file Word
+
+Jalankan builder dari folder skill ini:
+
+    python scripts/build_docx.py "<path draft>.md" "<path draft>.docx"
+
+- Builder meniru format artikel acuan *Agentic Coding* dengan kertas A4 (lihat `references/aturan.md` bagian 15).
+- Jika builder berhenti karena gambar tidak ditemukan, perbaiki path gambar di Markdown lalu jalankan ulang.
+- Setelah dibuat, sebutkan ke user bahwa file perlu dibuka di Word untuk pengecekan visual, karena skill tidak bisa membuka Word.
+
+### 8. Serahkan ke user
 
 Laporkan hal berikut secara ringkas:
 
-- Path draft.
-- Hasil validator (jumlah kata, subjudul, figure, referensi, dan sisa temuan Low).
+- Path file `.docx` dan `.md`.
+- Hasil validator: jumlah kata, subjudul, figure, referensi, dan sisa temuan Low.
 - Daftar sumber yang sudah diverifikasi beserta URL-nya.
 - Asumsi atau keputusan yang dibuat selama menulis.
 - Pengingat bahwa artikel perlu ditinjau manusia sebelum diajukan.
-
-Jika user ingin file Word, konversi dengan `pandoc "drafts/<nama>.md" -o "drafts/<nama>.docx"`. Catat bahwa gambar tidak ikut tersisip otomatis.
 
 ## Batasan
 

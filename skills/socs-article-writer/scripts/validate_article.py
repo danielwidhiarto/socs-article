@@ -12,11 +12,12 @@ import re
 import sys
 from collections import Counter
 
-FIG_OK = re.compile(r"^Figure (\d+)\. (.+) \((https?://\S+|AI Generated)\)\s*$")
-FIG_ANY = re.compile(r"^Figure\s+(\d+)\s*[.:]")
-FIG_COLON = re.compile(r"^Figure (\d+): ")
-BYLINE_LINE = re.compile(r"^Penulis\s*:")
-BYLINE_OK = re.compile(r"^Penulis: .+, .+ [\u2013-] .+$")
+CAPTION_DOT = re.compile(r"^Figure\s+(\d+)\.\s")  # format wajib (artikel acuan): 'Figure N. deskripsi'
+CAPTION_COLON = re.compile(r"^Figure\s+(\d+):\s")  # tidak sesuai format, ditandai Medium
+SOURCE = re.compile(r"^\((https?://\S+|AI Generated)\)$")
+IMAGE = re.compile(r"^!\[[^\]]*\]\([^)]+\)")
+BYLINE_LINE = re.compile(r"^Penulis:")
+BYLINE_OK = re.compile(r"^Penulis: .+, .+ \u2013 .+$")
 YEAR = re.compile(r"\((19|20)\d{2}[^)]*\)")
 URL = re.compile(r"https?://\S+")
 HEADING = re.compile(r"^(#{1,6})\s+(.*)$")
@@ -44,12 +45,11 @@ def main():
     def add(sev, msg):
         findings.append((sev, msg))
 
-    # Judul = baris non-kosong pertama
     title_idx = next((i for i, l in enumerate(raw_lines) if l.strip()), None)
     if title_idx is None:
         print("File kosong.")
         return 1
-    title = raw_lines[title_idx].lstrip("#").strip()
+    title = raw_lines[title_idx].lstrip("#").strip().replace("**", "")
     title_words = len(title.split())
     if title_words > 10:
         add("Medium", f"Judul {title_words} kata (maks 10).")
@@ -58,14 +58,25 @@ def main():
     if ":" not in title:
         add("Low", "Judul sebaiknya format 'Nama Teknologi: Tagline' (tanda ':' belum ada).")
 
-    # Pisahkan bagian: referensi, byline, caption, heading, dan prosa
+    # Hitungan kata seperti Word: semua teks dihitung sekali, kecuali baris tabel pemisah dan blok kode.
+    word_count = 0
+    in_code = False
+    for l in raw_lines:
+        s = l.strip()
+        if s.startswith("```"):
+            in_code = not in_code
+            continue
+        if in_code or not s or TABLE_SEP.match(s):
+            continue
+        word_count += len(clean_words(s))
+
     in_refs = False
     refs_entries = []
     refs_heading_line = None
     headings = []  # (level, text, line_no)
     prose = []  # (line_no, text)
     captions = []  # (line_no, line)
-    byline_lines = []
+    byline_check = []  # (line_no, text) baris setelah 'Penulis:'
     table_count = 0
     code_fence = False
     in_table = False
@@ -85,18 +96,18 @@ def main():
             in_table = False
             continue
 
+
         m = HEADING.match(stripped)
         if m:
-            level = len(m.group(1))
             text = m.group(2).strip()
-            headings.append((level, text, i + 1))
+            headings.append((len(m.group(1)), text, i + 1))
             in_refs = text.lower().startswith("referensi")
             if in_refs and text.lower() != "referensi":
                 refs_heading_line = i + 1
             continue
 
         if BYLINE_LINE.match(stripped):
-            byline_lines.append((i + 1, stripped))
+            byline_check.append((i + 1, stripped))
             in_refs = False
             continue
 
@@ -104,8 +115,14 @@ def main():
             refs_entries.append((i + 1, stripped))
             continue
 
-        if FIG_ANY.match(stripped):
+        if CAPTION_DOT.match(stripped) or CAPTION_COLON.match(stripped):
             captions.append((i + 1, stripped))
+            continue
+
+        if IMAGE.match(stripped):
+            continue
+
+        if SOURCE.match(stripped):
             continue
 
         if stripped.startswith("|"):
@@ -121,12 +138,6 @@ def main():
         prose.append((i + 1, stripped))
 
     # --- Panjang ---
-    # Hitungan seperti Word: semua teks (judul, caption, byline, referensi, tabel) dihitung sekali.
-    word_count = sum(
-        len(clean_words(l))
-        for l in raw_lines
-        if l.strip() and not TABLE_SEP.match(l.strip()) and not l.strip().startswith("```")
-    )
     if word_count < 500:
         add("High", f"Panjang artikel {word_count} kata (minimum 500).")
     elif word_count > 800:
@@ -154,31 +165,27 @@ def main():
     # --- Hook pembuka ---
     if prose:
         first_para = clean_words(prose[0][1])
-        if first_para and first_para[0].lower() not in ("bayangkan", "pernahkah", "dulu", "coba", "beberapa", "di", "dalam", "dunia", "pernah"):
+        if first_para and first_para[0].lower() not in (
+            "bayangkan", "pernahkah", "pernah", "coba", "dulu", "beberapa", "di", "dalam", "dunia", "banyak", "peta",
+        ):
             add("Low", "Pembuka sebaiknya dimulai adegan/fenomena konkret, misalnya 'Bayangkan ...' atau 'Pernahkah ...'.")
 
-    # --- Figure ---
+    # --- Figure: caption 'Figure N: ...' diikuti baris '(URL)' atau '(AI Generated)' ---
     if not captions:
         add("Medium", "Figure 1 wajib ada (tidak ditemukan caption Figure).")
     numbers = []
     for line_no, line in captions:
-        if FIG_COLON.match(line):
-            add("Medium", f"Baris {line_no}: caption memakai ':' — format wajib 'Figure N. Deskripsi (URL)'.")
-        m_ok = FIG_OK.match(line)
-        if not m_ok:
-            if not URL.search(line) and "AI Generated" not in line:
-                add("Medium", f"Baris {line_no}: caption figure tanpa URL sumber.")
-            elif not FIG_COLON.match(line):
-                add("Medium", f"Baris {line_no}: caption tidak sesuai format 'Figure N. Deskripsi (URL)'.")
-            m_num = FIG_ANY.match(line)
-        else:
-            m_num = m_ok
-        numbers.append(int(m_num.group(1)))
+        if CAPTION_COLON.match(line):
+            add("Medium", f"Baris {line_no}: caption memakai ':' setelah nomor, format wajib 'Figure N. deskripsi'.")
+        numbers.append(int((CAPTION_DOT.match(line) or CAPTION_COLON.match(line)).group(1)))
+        # Sumber figure harus di baris berikutnya yang tidak kosong.
+        next_line = next((l.strip() for l in raw_lines[line_no:line_no + 2] if l.strip()), "")
+        if not SOURCE.match(next_line):
+            add("Medium", f"Baris {line_no}: sumber figure harus di baris berikutnya dalam kurung, misalnya '(https://...)' atau '(AI Generated)'.")
     if numbers:
         if numbers[0] != 1:
             add("Medium", f"Penomoran figure dimulai dari {numbers[0]}, harus dari 1.")
-        expected = list(range(1, len(numbers) + 1))
-        if numbers != expected:
+        if numbers != list(range(1, len(numbers) + 1)):
             add("Medium", f"Penomoran figure tidak berurutan: {numbers}.")
     if captions and len(captions) < 2:
         add("Low", "Disarankan 2-4 figure (saat ini hanya 1).")
@@ -191,13 +198,12 @@ def main():
     if code_found:
         add("Low", "Ada blok kode. Artikel ini explainer, bukan tutorial; batasi potongan kode kecil.")
 
-    # --- Byline ---
-    if not byline_lines:
-        add("Medium", "Blok 'Penulis:' tidak ditemukan di bagian penutup.")
-    else:
-        for line_no, line in byline_lines:
-            if not BYLINE_OK.match(line):
-                add("Medium", f"Baris {line_no}: format byline harus 'Penulis: Nama, Gelar – Jabatan'.")
+    # --- Byline: 'Penulis:' lalu baris 'Nama, Gelar - Jabatan' ---
+    if not byline_check:
+        add("Medium", "Baris 'Penulis:' tidak ditemukan di bagian penutup.")
+    for line_no, text in byline_check:
+        if not BYLINE_OK.match(text):
+            add("Medium", f"Baris {line_no}: format byline harus 'Penulis: Nama, Gelar – Jabatan' dalam satu baris, dengan en dash.")
 
     # --- Referensi ---
     if not any(h[1].lower().startswith("referensi") for h in headings):
@@ -215,8 +221,6 @@ def main():
             add("High", f"Baris {line_no}: referensi tanpa URL.")
         if not YEAR.search(entry):
             add("Medium", f"Baris {line_no}: referensi tanpa tahun.")
-        if "[" in entry and "]" in entry:
-            add("Low", f"Baris {line_no}: nama organisasi sebaiknya tanpa kurung siku.")
 
     # --- Gaya: kata ganti dan caption tabel ---
     for i, l in enumerate(raw_lines):
@@ -260,3 +264,4 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
+
