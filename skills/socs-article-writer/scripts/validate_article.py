@@ -226,6 +226,12 @@ def main():
             add("Medium", f"Penomoran figure dimulai dari {numbers[0]}, harus dari 1.")
         if numbers != list(range(1, len(numbers) + 1)):
             add("Medium", f"Penomoran figure tidak berurutan: {numbers}.")
+    # Setiap figure wajib disebut di paragraf teks, bukan hanya dipajang.
+    caption_lines = {ln for ln, _ in captions}
+    body_text = " ".join(l for i, l in enumerate(raw_lines, 1) if i not in caption_lines and not l.lstrip().startswith("!["))
+    for n in numbers:
+        if not re.search(rf"\bfigure\s+{n}\b", body_text, re.IGNORECASE):
+            add("Medium", f"Figure {n} tidak disebut di paragraf teks. Sebut secara eksplisit, misalnya 'pada figure {n} berikut'.")
     if captions and len(captions) < 2:
         add("Low", "Disarankan 2-4 figure (saat ini hanya 1).")
     if len(captions) > 4:

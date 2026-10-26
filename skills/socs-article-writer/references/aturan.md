@@ -77,6 +77,7 @@ Figure N. Deskripsi singkat gambar
 - URL sumber wajib untuk gambar bukan AI-generated. URL hanya boleh dari sumber yang sudah diverifikasi, tidak boleh karangan (High).
 - Gambar AI-generated boleh dengan `(AI Generated)` sebagai pengganti URL.
 - Minimal satu figure harus dari sumber kredibel, bukan AI-generated.
+- Setiap figure wajib disebut secara eksplisit di paragraf teks, misalnya "Secara umum, prosesnya dapat dijelaskan melalui tahapan pada figure 1 berikut:". Figure yang hanya dipajang tanpa disebut di teks ditandai Medium.
 - Figure buatan skrip (diagram atau grafik yang digambar penulis) harus diberi caption yang jujur, misalnya "Ilustrasi penulis" atau "Grafik penulis berdasarkan data ...".
 - Untuk figure buatan skrip, URL di baris sumber adalah sumber fakta yang digambarkan, bukan sumber gambar. Jangan memakai URL yang menyiratkan gambar diambil dari sana.
 
@@ -150,6 +151,7 @@ Penulis: [Nama], [Gelar] – [Jabatan]
 - [ ] Total kata 500 sampai 800, target 600 sampai 700.
 - [ ] Minimal 3 subjudul, satu memuat keyword utama.
 - [ ] Figure 1 ada, penomoran berurutan, caption `Figure N.` dengan sumber `(URL)` atau `(AI Generated)` di baris berikutnya.
+- [ ] Setiap figure disebut di paragraf teks (misalnya "pada figure 1 berikut").
 - [ ] Tabel satu atau lebih, atau sudah dipertimbangkan.
 - [ ] Byline satu baris: `Penulis: Nama, Gelar – Jabatan`.
 - [ ] 3 sampai 7 referensi, satu per baris, masing-masing punya tahun dan URL.
