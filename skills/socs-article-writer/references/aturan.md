@@ -44,6 +44,7 @@ Urutan wajib:
 10. Referensi.
 
 Aturan tambahan:
+- Paragraf tidak boleh hanya 1 kalimat (Medium). Jika ada, gabungkan ke paragraf sebelumnya dalam bagian yang sama. Jika di bagian itu belum ada paragraf sebelumnya (misalnya setelah judul atau figure), gabungkan ke paragraf berikutnya.
 - Paragraf 3 sampai 5 kalimat sebagai saran (Low).
 - Buat paragraf baru hanya saat ide berpindah, misalnya dari adegan ke masalah, atau dari masalah ke solusi. Jangan memecah paragraf yang masih satu ide hanya untuk memenuhi jumlah paragraf atau kalimat.
 - Jika satu paragraf memuat dua ide berbeda dan lebih dari 5 kalimat, pecah di titik pergeseran ide.
@@ -153,6 +154,7 @@ Penulis: [Nama], [Gelar] – [Jabatan]
 - [ ] Tabel satu atau lebih, atau sudah dipertimbangkan.
 - [ ] Byline satu baris: `Penulis: Nama, Gelar – Jabatan`.
 - [ ] 3 sampai 7 referensi, satu per baris, masing-masing punya tahun dan URL.
+- [ ] Tidak ada paragraf yang hanya 1 kalimat.
 - [ ] Buku klaim ada, setiap angka berstatus Terverifikasi, dan sumbernya ada di Referensi.
 - [ ] Tidak ada typo atau spasi yang hilang (misalnya "eksekusi(https").
 - [ ] Topik belum pernah ditulis di situs.
