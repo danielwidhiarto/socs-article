@@ -73,6 +73,20 @@ def clean_words(text):
     return re.findall(r"\S+", text)
 
 
+ABBREV_DOT = re.compile(r"\b(dkk|dll|dsb|mis|sbb)\.", re.IGNORECASE)
+DECIMAL_DOT = re.compile(r"\d+(?:\.\d+)+")
+DOT_EXT = re.compile(r"\b[A-Za-z]+\.(?:md|py|json|ya?ml|tsx?|jsx?)\b")
+SENT_SPLIT = re.compile(r'[.!?]+["\')\]]*(?:\s+|$)')
+
+
+def count_sentences(text):
+    """Hitung kalimat; titik di angka (2310.08560), ekstensi file (CLAUDE.md), dan singkatan (dkk.) tidak dihitung."""
+    t = DECIMAL_DOT.sub(lambda m: m.group(0).replace(".", "\x00"), text)
+    t = DOT_EXT.sub(lambda m: m.group(0).replace(".", "\x00"), t)
+    t = ABBREV_DOT.sub(lambda m: m.group(0)[:-1] + "\x00", t)
+    return len([p for p in SENT_SPLIT.split(t) if p.strip()])
+
+
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser()
@@ -205,6 +219,16 @@ def main():
         if first and prev_first and first == prev_first:
             add("Medium", f"Baris {line_no}: paragraf berurutan diawali kata '{first}' yang sama.")
         prev_first = first
+
+    # --- Paragraf minimal 5 kalimat (aturan.md bagian 4) ---
+    for line_no, text in prose:
+        if LIST_ITEM.match(text) or text.startswith("|"):
+            continue
+        if text.rstrip().endswith(":"):
+            continue  # kalimat pengantar sebelum daftar bullet atau tabel
+        n_sent = count_sentences(text)
+        if n_sent < 5:
+            add("Medium", f"Baris {line_no}: paragraf hanya {n_sent} kalimat (minimal 5; lengkapi di paragraf yang sama sebelum memulai paragraf baru).")
 
     # --- Hook pembuka ---
     if prose:

@@ -39,12 +39,12 @@ Urutan wajib:
 5. Contoh penggunaan nyata: 3 sampai 4 skenario.
 6. Tabel (lihat bagian 7).
 7. Kelebihan dan keterbatasan, atau tantangan. Jujur dan spesifik, 2 sampai 4 poin.
-8. Kesimpulan: 2 sampai 4 kalimat. Satu pemikiran ke depan, satu kalimat yang kembali ke dunia nyata. Tanpa kalimat bombastis.
+8. Kesimpulan: satu paragraf, minimal 5 kalimat. Tetap ada satu pemikiran ke depan dan satu kalimat yang kembali ke dunia nyata. Tanpa kalimat bombastis.
 9. Byline `Penulis:`.
 10. Referensi.
 
 Aturan tambahan:
-- Paragraf 3 sampai 5 kalimat sebagai saran (Low).
+- Paragraf isi minimal 5 kalimat (Medium jika kurang). Tambahkan kalimat di paragraf yang sama sampai penuh; buat paragraf baru hanya setelah minimal 5 kalimat terkumpul, di bagian mana pun. Pengecualian: kalimat pengantar yang diakhiri ':' sebelum daftar bullet atau tabel.
 - Dua paragraf berurutan tidak boleh diawali kata yang sama (Medium).
 - Istilah teknis dijelaskan sekali. Penjelasan dalam kurung maksimal 7 kata, dan maksimal satu per paragraf (Low).
 - Fokus pada dampak dan insight, bukan syntax atau konfigurasi.
@@ -145,6 +145,7 @@ Penulis: [Nama], [Gelar] – [Jabatan]
 
 - [ ] Judul sama persis dengan judul yang dipilih, dan maksimal 10 kata.
 - [ ] Total kata 500 sampai 800, target 600 sampai 700.
+- [ ] Setiap paragraf isi minimal 5 kalimat (kecuali kalimat pengantar sebelum daftar bullet atau tabel).
 - [ ] Minimal 3 subjudul, satu memuat keyword utama.
 - [ ] Figure 1 ada, penomoran berurutan, caption `Figure N.` dengan sumber `(URL)` atau `(AI Generated)` di baris berikutnya.
 - [ ] Tabel satu atau lebih, atau sudah dipertimbangkan.

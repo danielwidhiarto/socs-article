@@ -76,7 +76,7 @@ Jalankan validator dari folder skill ini:
 
 - Perbaiki semua temuan High dan Medium, lalu jalankan ulang sampai tidak ada High.
 - Temuan Low dilaporkan ke user, dan diperbaiki jika mudah.
-- Validator memeriksa aturan mekanis, angka terhadap buku klaim, kata absolut, dan pola gaya anti-slop (em dash, kontras biner gimmick, throat-clearing, meta-komentar, declaratif kosong, klaim melang, intensifier kosong). Ia tidak bisa memastikan sumber itu benar. Kebenaran klaim tetap dipastikan lewat buku klaim dan dicek manusia.
+- Validator memeriksa aturan mekanis, angka terhadap buku klaim, kata absolut, dan pola gaya anti-slop (em dash, kontras biner gimmick, throat-clearing, meta-komentar, declaratif kosong, klaim melang, intensifier kosong), serta panjang paragraf (minimal 5 kalimat, aturan.md bagian 4). Ia tidak bisa memastikan sumber itu benar. Kebenaran klaim tetap dipastikan lewat buku klaim dan dicek manusia.
 
 ### 7. Buat file Word
 
