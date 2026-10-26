@@ -1,3 +1,4 @@
 # Artikel draft dan artikel terbit tidak boleh masuk git (repo ini public)
 published/
 submitted/
+drafts/
