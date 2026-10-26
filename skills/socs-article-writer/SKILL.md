@@ -11,17 +11,22 @@ Aturan lengkap ada di `references/aturan.md`. Contoh artikel terbit ada di `refe
 
 ## Langkah kerja
 
-### 1. Intake
+### 1. Intake (wajib sebelum menulis apa pun)
 
-Pastikan informasi berikut sudah ada. Tanyakan yang belum ada, dan lewati yang sudah diberikan user:
+Jangan mulai menulis sebelum informasi wajib berikut ada. Informasi penulis bersifat wajib dan tidak boleh diisi dari memori, contoh, atau placeholder:
 
+- Penulis: nama lengkap, gelar, dan jabatan. Cek dulu `penulis.local.md` di root workspace. Jika ada, tampilkan isinya ke user dan minta konfirmasi. Jika tidak ada, tanyakan lalu simpan jawabannya ke `penulis.local.md` (file ini di-ignore git, jangan di-commit).
 - Topik: satu teknologi atau konsep. Jika user belum punya, tawarkan 2-3 pilihan dari klaster yang sesuai.
+
+Informasi berikut boleh ditanyakan bersamaan atau dilewati jika user sudah memberikannya:
+
 - Sudut pandang atau tagline (opsional). Jika tidak ada, buat 3 kandidat judul dengan format `Nama Teknologi: Tagline`.
 - Keyword wajib (opsional). Semua keyword harus muncul di artikel.
 - SDG (opsional). Jika tidak diminta, jangan dibahas.
-- Penulis: nama, gelar, dan jabatan. Wajib untuk byline. Tanyakan ketiganya, jangan mengisi dari memori atau dari contoh.
 - Gambar: sumber gambar jika user punya. Jika tidak, usulkan 2-3 gambar yang bisa dicari dari sumber resmi, atau ilustrasi AI-generated yang diberi label.
 - Folder kerja untuk draft dan gambar, misalnya `drafts/<judul>/`.
+
+Jika penulis belum diketahui, berhenti dan tanyakan. Jangan menulis `[Nama]` atau `[Gelar]` ke dalam artikel.
 
 ### 2. Cek duplikat
 

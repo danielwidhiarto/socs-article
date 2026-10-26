@@ -56,7 +56,7 @@ Pemasangan lewat `npx skills add` juga tersedia untuk beberapa agent, tetapi bel
 
 ## Cara pakai
 
-Setelah skill terpasang, minta agent menulis artikel SOCS. Agent akan menanyakan topik, nama penulis, gelar, dan jabatan sebelum mulai menulis.
+Setelah skill terpasang, minta agent menulis artikel SOCS. Sebelum menulis, agent akan menanyakan nama lengkap, gelar, dan jabatan penulis, lalu menyimpannya di `penulis.local.md` di root workspace. File ini di-ignore git, jadi tidak ikut di-commit. Validator juga akan menolak artikel yang masih berisi placeholder seperti `[Nama]`.
 
 Untuk memvalidasi draft secara manual (butuh Python 3, tanpa library tambahan):
 

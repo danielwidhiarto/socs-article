@@ -222,6 +222,12 @@ def main():
         if not YEAR.search(entry):
             add("Medium", f"Baris {line_no}: referensi tanpa tahun.")
 
+    # --- Placeholder yang tertinggal (mis. [Nama], [Gelar], [URL sumber]) ---
+    placeholder_hits = re.findall(r"\[[^\[\]\n]+\](?!\()", "\n".join(raw_lines))
+    if placeholder_hits:
+        sample = ", ".join(sorted(set(placeholder_hits))[:5])
+        add("High", f"Placeholder tertinggal di artikel: {sample}. Isi dengan data asli sebelum dibuat .docx.")
+
     # --- Gaya: kata ganti dan caption tabel ---
     for i, l in enumerate(raw_lines):
         if re.search(r"\bAnda\b", l):
