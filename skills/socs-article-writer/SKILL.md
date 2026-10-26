@@ -38,8 +38,22 @@ Jika penulis belum diketahui, berhenti dan tanyakan. Jangan menulis `[Nama]` ata
 
 - Cari 3-5 sumber kredibel dengan remote_web_search. Prioritaskan docs resmi, blog vendor besar, paper, dan laporan riset.
 - Verifikasi setiap URL dengan web_fetch. URL yang gagal dibuka tidak boleh masuk artikel.
-- Catat setiap angka atau klaim beserta sumbernya. Angka yang tidak bisa diverifikasi jangan dipakai.
+- Catat setiap angka atau klaim di buku klaim (lihat 3b), beserta sumber dan buktinya. Angka yang tidak bisa diverifikasi jangan dipakai.
 - Jangan pernah mengarang URL, angka, kutipan, atau nama peneliti.
+
+### 3b. Buku klaim
+
+Sebelum menulis, buat `drafts/<judul>/klaim.md` berisi tabel:
+
+| No | Klaim | Jenis | URL sumber | Bukti | Status |
+|---|---|---|---|---|---|
+
+- Jenis: angka, persentase, ukuran waktu, tahun, nama peneliti, atau klaim perbandingan/kausal.
+- Verifikasi setiap URL dengan web_fetch mode `full`. Mode `selective` hanya untuk pencarian awal. Kegagalan pencarian frasa di mode selective belum berarti klaim salah, jadi cek ulang di mode `full` sebelum mengubah status.
+- Status `Terverifikasi` hanya jika bukti ditemukan di sumber, dan kolom Bukti berisi kutipan atau baris yang relevan. Status `Belum` jika tidak ditemukan.
+- Klaim `Belum` dihapus dari draft, atau diubah jadi pernyataan umum tanpa angka.
+- Klaim absolut (mewajibkan, menjamin, terbukti, 100%, selalu) hanya dipakai jika sumber memang mengatakannya sekuat itu. Kalau tidak, perhalus, misalnya "menyarankan" atau "umumnya".
+- Figure buatan skrip: caption wajib menyebut bahwa itu ilustrasi atau grafik buatan penulis. URL di baris sumber adalah sumber fakta yang digambarkan, bukan sumber gambar.
 
 ### 4. Outline
 
@@ -57,11 +71,11 @@ Susun kerangka berdasarkan urutan di `references/aturan.md` bagian 4 dan pola di
 
 Jalankan validator dari folder skill ini:
 
-    python scripts/validate_article.py "<path draft>.md" --keywords "keyword1,keyword2"
+    python scripts/validate_article.py "<path draft>.md" --keywords "keyword1,keyword2" --klaim "drafts/<judul>/klaim.md"
 
 - Perbaiki semua temuan High dan Medium, lalu jalankan ulang sampai tidak ada High.
 - Temuan Low dilaporkan ke user, dan diperbaiki jika mudah.
-- Validator hanya memeriksa aturan mekanis. Kualitas tulisan, akurasi klaim, dan relevansi sumber tetap perlu dicek manusia.
+- Validator memeriksa aturan mekanis, angka terhadap buku klaim, dan kata absolut. Ia tidak bisa memastikan sumber itu benar. Kebenaran klaim tetap dipastikan lewat buku klaim dan dicek manusia.
 
 ### 7. Buat file Word
 

@@ -74,6 +74,8 @@ Figure N. Deskripsi singkat gambar
 - URL sumber wajib untuk gambar bukan AI-generated. URL hanya boleh dari sumber yang sudah diverifikasi, tidak boleh karangan (High).
 - Gambar AI-generated boleh dengan `(AI Generated)` sebagai pengganti URL.
 - Minimal satu figure harus dari sumber kredibel, bukan AI-generated.
+- Figure buatan skrip (diagram atau grafik yang digambar penulis) harus diberi caption yang jujur, misalnya "Ilustrasi penulis" atau "Grafik penulis berdasarkan data ...".
+- Untuk figure buatan skrip, URL di baris sumber adalah sumber fakta yang digambarkan, bukan sumber gambar. Jangan memakai URL yang menyiratkan gambar diambil dari sana.
 
 ## 7. Tabel
 
@@ -120,6 +122,10 @@ Penulis: [Nama], [Gelar] – [Jabatan]
 - Jika menyebut temuan, sebut pemiliknya secara natural, misalnya "tim di vLLM" atau "peneliti dari Universitas X".
 - Sitasi formal seperti `(Nama dkk., 2023)` hanya boleh jika sumbernya ada di Referensi.
 - Tahun publikasi harus sesuai dengan sumbernya. Jangan menebak tahun.
+- Setiap angka (persentase, ukuran, waktu, jumlah) wajib tercatat di buku klaim (`klaim.md`) dengan status Terverifikasi. Validator memeriksanya jika diberi `--klaim` (Medium jika tidak).
+- Klaim yang tidak ditemukan di sumber setelah dicek dengan web_fetch mode full berstatus Belum. Klaim Belum dihapus dari draft, atau diubah jadi pernyataan umum tanpa angka.
+- Kata absolut seperti mewajibkan, menjamin, terbukti, sempurna, pasti, dan 100% diperiksa validator sebagai Low. Pakai hanya jika sumber memang mengatakannya sekuat itu, kalau tidak perhalus.
+- Pencarian frasa yang gagal di mode selective belum berarti klaim salah. Cek ulang di mode full sebelum mengubah status.
 
 ## 12. Pemilihan topik
 
@@ -142,7 +148,7 @@ Penulis: [Nama], [Gelar] – [Jabatan]
 - [ ] Tabel satu atau lebih, atau sudah dipertimbangkan.
 - [ ] Byline satu baris: `Penulis: Nama, Gelar – Jabatan`.
 - [ ] 3 sampai 7 referensi, satu per baris, masing-masing punya tahun dan URL.
-- [ ] Setiap angka punya sumber di Referensi.
+- [ ] Buku klaim ada, setiap angka berstatus Terverifikasi, dan sumbernya ada di Referensi.
 - [ ] Tidak ada typo atau spasi yang hilang (misalnya "eksekusi(https").
 - [ ] Topik belum pernah ditulis di situs.
 - [ ] `.docx` sudah dibuat dengan `build_docx.py` dan dibuka untuk dicek.
