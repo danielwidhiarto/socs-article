@@ -37,6 +37,8 @@ Jika penulis belum diketahui, berhenti dan tanyakan. Jangan menulis `[Nama]` ata
 ### 3. Riset dan verifikasi sumber
 
 - Cari 3-5 sumber kredibel dengan remote_web_search. Prioritaskan docs resmi, blog vendor besar, paper, dan laporan riset.
+- Utamakan sumber terbaru, dari 3 tahun terakhir (dihitung dari tahun berjalan). Sumber lebih lama hanya untuk konsep dasar, sejarah, atau asal-usul yang diminta di bagian "Apa itu X".
+- Untuk docs resmi, pastikan halaman yang dipakai mengacu versi yang sedang berlaku. Jika halaman menunjukkan versi lama, cari halaman versi terbaru atau catat di laporan ke user.
 - Verifikasi setiap URL dengan web_fetch. URL yang gagal dibuka tidak boleh masuk artikel.
 - Catat setiap angka atau klaim di buku klaim (lihat 3b), beserta sumber dan buktinya. Angka yang tidak bisa diverifikasi jangan dipakai.
 - Jangan pernah mengarang URL, angka, kutipan, atau nama peneliti.

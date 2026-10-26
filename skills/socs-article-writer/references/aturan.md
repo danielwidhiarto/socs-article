@@ -45,6 +45,9 @@ Urutan wajib:
 
 Aturan tambahan:
 - Paragraf 3 sampai 5 kalimat sebagai saran (Low).
+- Buat paragraf baru hanya saat ide berpindah, misalnya dari adegan ke masalah, atau dari masalah ke solusi. Jangan memecah paragraf yang masih satu ide hanya untuk memenuhi jumlah paragraf atau kalimat.
+- Jika satu paragraf memuat dua ide berbeda dan lebih dari 5 kalimat, pecah di titik pergeseran ide.
+- Hook: jika totalnya kurang dari 5 kalimat, tulis dalam 1 paragraf, meskipun ada pergeseran kecil. Hook 2 paragraf hanya jika totalnya 5 kalimat atau lebih dan ada pergeseran dari adegan ke masalah.
 - Dua paragraf berurutan tidak boleh diawali kata yang sama (Medium).
 - Istilah teknis dijelaskan sekali. Penjelasan dalam kurung maksimal 7 kata, dan maksimal satu per paragraf (Low).
 - Fokus pada dampak dan insight, bukan syntax atau konfigurasi.
@@ -114,6 +117,8 @@ Penulis: [Nama], [Gelar] – [Jabatan]
 - Setiap entri wajib punya tahun (Medium) dan URL (High).
 - URL di referensi menjadi hyperlink otomatis di dokumen Word.
 - Sumber kredibel: docs resmi, blog vendor besar (Google, IBM, Microsoft, AWS, NVIDIA), paper (arXiv, Nature), laporan riset (Gartner). Hindari Wikipedia sebagai sumber utama, blog anonim, dan agregator.
+- Utamakan sumber dari 3 tahun terakhir (dihitung dari tahun berjalan). Sumber lebih lama hanya boleh untuk konsep dasar, sejarah, atau asal-usul.
+- Untuk docs resmi, gunakan halaman yang mengacu versi terbaru. Jika hanya ada sumber lama untuk klaim penting, catat di laporan ke user.
 - URL harus sudah diverifikasi (bisa dibuka) sebelum dimasukkan.
 
 ## 11. Angka dan klaim
