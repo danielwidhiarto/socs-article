@@ -255,6 +255,12 @@ def main():
             add("Medium", f"Penomoran figure dimulai dari {numbers[0]}, harus dari 1.")
         if numbers != list(range(1, len(numbers) + 1)):
             add("Medium", f"Penomoran figure tidak berurutan: {numbers}.")
+        # Setiap figure harus disebut di kalimat artikel, bukan hanya di caption (aturan.md bagian 6).
+        body_text = "\n".join(t for _, t in prose)
+        for n in numbers:
+            mentions = len(re.findall(rf"Figure\s+{n}\b", body_text))
+            if mentions == 0:
+                add("Low", f"Figure {n} tidak pernah disebut di kalimat artikel; tambahkan rujukan seperti 'seperti pada Figure {n}' di paragraf yang membahasnya.")
     if captions and len(captions) < 2:
         add("Low", "Disarankan 2-4 figure (saat ini hanya 1).")
     if len(captions) > 4:

@@ -71,6 +71,7 @@ Figure N. Deskripsi singkat gambar
 - Sumber harus di baris berikutnya dalam kurung: `(URL)` atau `(AI Generated)` (Medium jika tidak ada).
 - Lebar gambar default 14,3 cm. Untuk mengubah, tambahkan `{w=13.2cm}` setelah path. Tinggi mengikuti proporsi gambar kecuali ditambah `h=...cm`.
 - Penomoran berurutan mulai dari 1 tanpa lompatan (Medium).
+- Setiap figure wajib disebut di kalimat artikel, bukan hanya di caption (Low jika tidak). Satu figure: sebut sekali, misalnya "seperti pada Figure 1". Dua figure atau lebih: semuanya disebut di kalimat, masing-masing minimal sekali, di paragraf yang membahas gambarnya.
 - URL sumber wajib untuk gambar bukan AI-generated. URL hanya boleh dari sumber yang sudah diverifikasi, tidak boleh karangan (High).
 - Gambar AI-generated boleh dengan `(AI Generated)` sebagai pengganti URL.
 - Minimal satu figure harus dari sumber kredibel, bukan AI-generated.
