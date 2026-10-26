@@ -4,17 +4,17 @@
 Figure 1. [Deskripsi singkat gambar]
 (https://url-sumber)
 
-[Hook: adegan atau masalah sehari-hari. Mulai dengan "Bayangkan ..." atau "Pernahkah kamu ...?"]
+[Hook: adegan atau masalah sehari-hari, minimal 5 kalimat. Mulai dengan "Bayangkan ..." atau "Pernahkah kamu ...?"]
 
-[Penegasan singkat: apa yang akan dibahas dan kenapa penting sekarang.]
+[Penegasan singkat, minimal 5 kalimat: apa yang akan dibahas dan kenapa penting sekarang.]
 
 ## Apa Itu [Nama Teknologi]?
 
-[Definisi dalam bahasa sederhana. Sebut asal-usul singkat: siapa, tahun, dari mana. Sebut satu contoh nyata.]
+[Definisi dalam bahasa sederhana, minimal 5 kalimat. Sebut asal-usul singkat: siapa, tahun, dari mana. Sebut satu contoh nyata.]
 
 ## Bagaimana [Nama Teknologi] Bekerja?
 
-[Pengantar singkat, diakhiri dengan titik dua jika diikuti daftar:]
+[Pengantar, minimal 5 kalimat, diakhiri dengan titik dua jika diikuti daftar:]
 
 - **[Istilah 1]:** [penjelasan singkat]
 - **[Istilah 2]:** [penjelasan singkat]
@@ -26,11 +26,11 @@ Figure 2. [Deskripsi alur atau arsitektur]
 
 ## Contoh Penggunaan di Dunia Nyata
 
-[Skenario 1 dengan produk atau perusahaan yang dikenal.]
+[Minimal 5 kalimat tentang skenario 1 dengan produk atau perusahaan yang dikenal.]
 
-[Skenario 2.]
+[Minimal 5 kalimat tentang skenario 2.]
 
-[Satu angka riset atau ukuran nyata, dengan pemilik temuannya disebut secara natural.]
+[Minimal 5 kalimat, termasuk satu angka riset atau ukuran nyata, dengan pemilik temuannya disebut secara natural.]
 
 ## Perbandingan Singkat
 
@@ -42,11 +42,11 @@ Figure 2. [Deskripsi alur atau arsitektur]
 
 ## Kelebihan dan Keterbatasan
 
-[Dua sampai empat poin kelebihan dan keterbatasan, jujur dan spesifik.]
+[Minimal 5 kalimat tentang kelebihan dan keterbatasan, jujur dan spesifik.]
 
 ## Kesimpulan
 
-[Dua sampai empat kalimat. Satu pemikiran ke depan, satu kalimat yang kembali ke dunia nyata. Tanpa kalimat bombastis.]
+[Minimal 5 kalimat. Satu pemikiran ke depan, satu kalimat yang kembali ke dunia nyata. Tanpa kalimat bombastis.]
 
 Penulis: [Nama], [Gelar] – [Jabatan]
 

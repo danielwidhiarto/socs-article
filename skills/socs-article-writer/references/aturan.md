@@ -39,16 +39,15 @@ Urutan wajib:
 5. Contoh penggunaan nyata: 3 sampai 4 skenario.
 6. Tabel (lihat bagian 7).
 7. Kelebihan dan keterbatasan, atau tantangan. Jujur dan spesifik, 2 sampai 4 poin.
-8. Kesimpulan: 2 sampai 4 kalimat. Satu pemikiran ke depan, satu kalimat yang kembali ke dunia nyata. Tanpa kalimat bombastis.
+8. Kesimpulan: minimal 5 kalimat. Satu pemikiran ke depan, satu kalimat yang kembali ke dunia nyata. Tanpa kalimat bombastis.
 9. Byline `Penulis:`.
 10. Referensi.
 
 Aturan tambahan:
-- Paragraf tidak boleh hanya 1 kalimat (Medium). Jika ada, gabungkan ke paragraf sebelumnya dalam bagian yang sama. Jika di bagian itu belum ada paragraf sebelumnya (misalnya setelah judul atau figure), gabungkan ke paragraf berikutnya.
-- Paragraf 3 sampai 5 kalimat sebagai saran (Low).
+- Setiap paragraf prosa minimal 5 kalimat, tanpa pengecualian (Medium). Paragraf yang kurang dari 5 kalimat digabung dengan paragraf sebelumnya dalam bagian yang sama. Jika di bagian itu belum ada paragraf sebelumnya, gabungkan dengan paragraf berikutnya. Jika kalimatnya belum cukup, tambahkan kalimat yang masih satu ide, bukan kalimat kosong.
 - Buat paragraf baru hanya saat ide berpindah, misalnya dari adegan ke masalah, atau dari masalah ke solusi. Jangan memecah paragraf yang masih satu ide hanya untuk memenuhi jumlah paragraf atau kalimat.
 - Jika satu paragraf memuat dua ide berbeda dan lebih dari 5 kalimat, pecah di titik pergeseran ide.
-- Hook: jika totalnya kurang dari 5 kalimat, tulis dalam 1 paragraf, meskipun ada pergeseran kecil. Hook 2 paragraf hanya jika totalnya 5 kalimat atau lebih dan ada pergeseran dari adegan ke masalah.
+- Hook: 1 paragraf minimal 5 kalimat. Hook 2 paragraf hanya jika masing-masing paragraf minimal 5 kalimat dan ada pergeseran dari adegan ke masalah.
 - Dua paragraf berurutan tidak boleh diawali kata yang sama (Medium).
 - Istilah teknis dijelaskan sekali. Penjelasan dalam kurung maksimal 7 kata, dan maksimal satu per paragraf (Low).
 - Fokus pada dampak dan insight, bukan syntax atau konfigurasi.
@@ -154,7 +153,7 @@ Penulis: [Nama], [Gelar] – [Jabatan]
 - [ ] Tabel satu atau lebih, atau sudah dipertimbangkan.
 - [ ] Byline satu baris: `Penulis: Nama, Gelar – Jabatan`.
 - [ ] 3 sampai 7 referensi, satu per baris, masing-masing punya tahun dan URL.
-- [ ] Tidak ada paragraf yang hanya 1 kalimat.
+- [ ] Setiap paragraf prosa minimal 5 kalimat.
 - [ ] Buku klaim ada, setiap angka berstatus Terverifikasi, dan sumbernya ada di Referensi.
 - [ ] Tidak ada typo atau spasi yang hilang (misalnya "eksekusi(https").
 - [ ] Topik belum pernah ditulis di situs.

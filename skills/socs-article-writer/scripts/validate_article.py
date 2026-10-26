@@ -183,7 +183,7 @@ def main():
         ):
             add("Low", "Pembuka sebaiknya dimulai adegan/fenomena konkret, misalnya 'Bayangkan ...' atau 'Pernahkah ...'.")
 
-    # --- Jumlah kalimat per paragraf (aturan.md bagian 4): saran 3-5 (Low). Pecah jika > 5 dan memuat dua ide ---
+    # --- Jumlah kalimat per paragraf (aturan.md bagian 4): minimal 5 (Medium), lebih dari 5 pecah jika dua ide (Low) ---
     # Paragraf = baris prosa berurutan. List dan tabel tidak dihitung.
     SENT_SPLIT = re.compile(r"(?<=[.!?])\s+(?=[A-Z0-9\"'(*\[])")
     paragraphs = []
@@ -204,14 +204,10 @@ def main():
         start = para[0][0]
         body = " ".join(t for _, t in para)
         n_sent = len([s for s in SENT_SPLIT.split(body) if s.strip()])
-        section = max((h for h in headings if h[2] < start), key=lambda h: h[2], default=None)
-        in_conclusion = section is not None and section[1].lower().startswith("kesimpulan")
-        if n_sent == 1:
-            add("Medium", f"Baris {start}: paragraf hanya 1 kalimat. Gabungkan ke paragraf sebelumnya di bagian yang sama.")
+        if n_sent < 5:
+            add("Medium", f"Baris {start}: paragraf hanya {n_sent} kalimat (minimal 5). Gabungkan ke paragraf sebelumnya di bagian yang sama, atau tambahkan kalimat yang masih satu ide.")
         elif n_sent > 5:
-            add("Low", f"Baris {start}: paragraf {n_sent} kalimat (saran 3-5). Pecah jika memuat dua ide berbeda.")
-        elif n_sent < 3 and not in_conclusion:
-            add("Low", f"Baris {start}: paragraf hanya {n_sent} kalimat (saran 3-5). Gabungkan jika masih satu ide.")
+            add("Low", f"Baris {start}: paragraf {n_sent} kalimat. Pecah jika memuat dua ide berbeda.")
 
     # --- Figure: caption 'Figure N: ...' diikuti baris '(URL)' atau '(AI Generated)' ---
     if not captions:
