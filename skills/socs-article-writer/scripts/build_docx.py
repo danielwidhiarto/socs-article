@@ -452,6 +452,7 @@ def build(md_path, out_path, target="socs"):
             p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
             set_auto_spacing(p)
             add_numbered(p, NUM_BULLET_ID)
+            add_inline(p, value)
 
         elif kind == "number":
             if bekasi:
@@ -468,6 +469,7 @@ def build(md_path, out_path, target="socs"):
             set_auto_spacing(p)
             add_numbered(p, num_id)
 
+            add_inline(p, value)
         elif kind == "ref":
             if bekasi:
                 # Arsip Bekasi: referensi numbered/bare URL, tanpa hyperlink aktif.
