@@ -3,8 +3,8 @@
 
 SOCS: format meniru artikel acuan "Agentic Coding" (folder submitted/socs), kertas A4.
 Bekasi CSSE: meniru pola dominan 34 arsip published/bekasi-csse (Pola A):
-judul Title tengah, subjudul Heading 2, caption 'Gambar N. ... (sumber: URL)',
-kertas Letter (21,59 x 27,94 cm), margin 2,54 cm. Tanpa baris byline.
+judul Title tengah, subjudul Heading 2, caption 'Gambar N. ... (sumber: URL)' rata tengah,
+list bullet/numbered dan referensi rata kiri tanpa indent,
 
 Pemakaian:
     python build_docx.py draft.md keluaran.docx [--target socs|bekasi]
@@ -399,6 +399,7 @@ def build(md_path, out_path, target="socs"):
         elif kind == "caption":
             if bekasi:
                 p = doc.add_paragraph(style="Caption")
+                p.alignment = WD_ALIGN_PARAGRAPH.CENTER
                 add_inline(p, value)
                 continue
             p = doc.add_paragraph()
@@ -411,6 +412,7 @@ def build(md_path, out_path, target="socs"):
                 # Sumber inline sudah menyatu di caption ('Gambar N. ... (sumber: URL)');
                 # baris sumber terpisah tetap dirender di bawah caption.
                 p = doc.add_paragraph(style="Caption")
+                p.alignment = WD_ALIGN_PARAGRAPH.CENTER
                 add_inline(p, value)
                 continue
             p = doc.add_paragraph()
@@ -434,6 +436,9 @@ def build(md_path, out_path, target="socs"):
             if bekasi:
                 p = doc.add_paragraph(style="List Paragraph")
                 p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+                p.paragraph_format.left_indent = Inches(0)
+                p.paragraph_format.first_line_indent = Inches(0)
+                add_numbered(p, NUM_BULLET_ID)
                 add_inline(p, value)
                 prev_kind = kind
                 continue
@@ -441,12 +446,14 @@ def build(md_path, out_path, target="socs"):
             p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
             set_auto_spacing(p)
             add_numbered(p, NUM_BULLET_ID)
-            add_inline(p, value)
 
         elif kind == "number":
             if bekasi:
                 p = doc.add_paragraph(style="List Paragraph")
                 p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+                p.paragraph_format.left_indent = Inches(0)
+                p.paragraph_format.first_line_indent = Inches(0)
+                add_numbered(p, num_id)
                 add_inline(p, value)
                 prev_kind = kind
                 continue
@@ -454,12 +461,13 @@ def build(md_path, out_path, target="socs"):
             p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
             set_auto_spacing(p)
             add_numbered(p, num_id)
-            add_inline(p, value)
 
         elif kind == "ref":
             if bekasi:
                 # Arsip Bekasi: referensi numbered/bare URL, tanpa hyperlink aktif.
                 p = doc.add_paragraph(style="List Paragraph")
+                p.paragraph_format.left_indent = Inches(0)
+                p.paragraph_format.first_line_indent = Inches(0)
                 add_inline(p, value)
                 prev_kind = kind
                 continue

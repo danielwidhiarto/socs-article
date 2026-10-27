@@ -24,7 +24,7 @@ dan 20 judul lain (Agustus 2024–2026).
 | Byline | Wajib `Penulis: Nama, Gelar – Jabatan` | Tidak ada (34/34 tanpa `Penulis:`; author web = `editorarticle`). 2 file bawa sisa `Author:` pola lama, jangan ditiru. Penulis tidak perlu ditanya |
 | Referensi | Format ketat, 3–7, tahun wajib | Bebas: bare URL, numbered, atau link judul; 3–8; tahun opsional. Heading campur (`References` 18, `Referensi` 10, varian lain 6); URL teks polos, bukan hyperlink aktif |
 | Subjudul | Min 3 (`##`/`###`), High jika kurang | Min 2; pola arsip: `Heading 2` (11 file) atau paragraf bold-lead (20 file). Template baru pakai `Heading 2` (Pola A). Validator terima keduanya, Medium jika kurang |
-| Paragraf | Min 5 kalimat | Min 3 kalimat (Medium jika kurang) |
+| Paragraf | Min 5 kalimat, satu gagasan satu paragraf | Min 3 kalimat; satu gagasan utuh = satu paragraf, gabungkan sampai min 3 kalimat terkumpul. Di atas 8 kalimat: pecah per pergeseran gagasan |
 | Judul | Maks 10 kata / 70 karakter (Medium) | Maks 15 kata / 110 karakter (Low); bentuk bebas, pertanyaan sah |
 | Struktur | Urutan 10 langkah wajib | Esai opini bebas; pola umum: judul → gambar → hook → 2–6 subjudul → referensi |
 | Kertas Word | A4 (21,0 × 29,7 cm) | Letter (21,59 × 27,94 cm), margin 2,54 cm — dari 34 arsip; builder: `--target bekasi` |

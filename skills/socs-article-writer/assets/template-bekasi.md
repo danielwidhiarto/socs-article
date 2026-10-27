@@ -5,13 +5,11 @@ Gambar 1. [Deskripsi singkat gambar] (sumber: https://url-sumber-gambar)
 
 Hai, *Software Engineers*!
 
-[Hook: adegan atau masalah sehari-hari. Boleh "Bayangkan ...", "Pernahkah Anda ...?", atau fenomena konkret. Minimal 3 kalimat.]
-
-[Konteks: apa yang dibahas dan kenapa penting sekarang. Minimal 3 kalimat per paragraf.]
+[Hook + konteks dalam SATU paragraf bila satu gagasan: adegan atau masalah sehari-hari, boleh "Bayangkan ...", "Pernahkah Anda ...?", atau fenomena konkret. Minimal 3 kalimat; di atas 8 kalimat pecah per pergeseran gagasan.]
 
 ## [Subjudul 1: definisi atau konsep inti]
 
-[Penjelasan dalam bahasa santai tapi kredibel. Istilah teknis tetap Inggris.]
+[Penjelasan dalam bahasa santai tapi kredibel. Istilah teknis tetap Inggris; istilah asing yang punya padanan Indonesia tapi dipertahankan Inggris ditulis miring, misalnya *error*, *output*.]
 
 ## [Subjudul 2: cara kerja, pembahasan, atau contoh]
 

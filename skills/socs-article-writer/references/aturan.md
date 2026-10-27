@@ -47,7 +47,7 @@ Aturan tambahan:
 - Paragraf isi minimal 5 kalimat (Medium jika kurang). Tambahkan kalimat di paragraf yang sama sampai penuh; buat paragraf baru hanya setelah minimal 5 kalimat terkumpul, di bagian mana pun. Pengecualian: kalimat pengantar yang diakhiri ':' sebelum daftar bullet atau tabel.
 - Dua paragraf berurutan tidak boleh diawali kata yang sama (Medium).
 - Istilah teknis dijelaskan sekali. Penjelasan dalam kurung maksimal 7 kata, dan maksimal satu per paragraf (Low).
-- Fokus pada dampak dan insight, bukan syntax atau konfigurasi.
+- Satu gagasan utuh = satu paragraf. Jangan pecah satu gagasan menjadi dua paragraf hanya agar terlihat pendek; gabungkan sampai minimal 5 kalimat terkumpul sebelum memulai paragraf baru. Jika setelah digabung melebihi 8 kalimat, pecah berdasarkan pergeseran gagasan, bukan asal potong.
 
 ## 5. Subjudul
 
@@ -88,7 +88,7 @@ Figure N. Deskripsi singkat gambar
 ## 8. Gaya dan bahasa
 
 - Bahasa Indonesia ragam populer-ilmiah: santai tapi kredibel. Bukan bahasa skripsi, bukan slang.
-- Istilah teknis tetap Inggris, misalnya cloud, framework, deploy, open source, pipeline.
+- Istilah asing yang punya padanan Indonesia tetapi dipertahankan dalam bahasa Inggris ditulis miring (italic), misalnya *error* (bukan galat), *output* (bukan keluaran), *throughput*. Istilah teknis yang memang standar Inggris (cloud, framework, deploy, open source, pipeline) tetap tegak tanpa italic.
 - Pakai "kamu" dan "kita". Jangan pakai "Anda" (Low).
 - Tanpa em dash (—). Pakai koma, titik, atau tanda kurung (Medium). Pemisah byline tetap en dash `–`.
 - Gaya anti-slop: hindari pola tulisan AI seperti kontras biner gimmick ("bukan sekadar X, melainkan Y"), pembuka basa-basi ("tak dapat dipungkiri", "di era digital ini"), meta-komentar ("di bagian ini kita akan ..."), intensifier kosong ("sangat", "sebenarnya", "benar-benar"), declaratif kosong ("dampaknya sangat besar" tanpa menyebut spesifiknya), dan klaim melang ("selalu", "semua orang"). Daftar lengkap dan cara memperbaikinya ada di `gaya-menulis.md` (temuan validator: Low, kecuali em dash: Medium).
