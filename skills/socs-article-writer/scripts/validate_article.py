@@ -272,9 +272,15 @@ def main():
     # --- Hook pembuka ---
     if prose:
         first_para = clean_words(prose[0][1])
-        if first_para and first_para[0].lower() not in (
+        first_word = first_para[0].lower() if first_para else None
+        hook_ok = first_word in (
             "bayangkan", "pernahkah", "pernah", "coba", "dulu", "beberapa", "di", "dalam", "dunia", "banyak", "peta",
+        )
+        if bekasi and first_word == "hai," and any(
+            w.lower() in ("bayangkan", "pernahkah", "pernah", "coba") for w in first_para[1:6]
         ):
+            hook_ok = True  # sapaan khas Bekasi 'Hai, Software Engineers!' + hook sah
+        if first_para and not hook_ok:
             add("Low", "Pembuka sebaiknya dimulai adegan/fenomena konkret, misalnya 'Bayangkan ...' atau 'Pernahkah ...'.")
 
     # --- Figure: SOCS 'Figure N.' + baris '(URL)'; Bekasi 'Gambar N.' + sumber inline/(sumber:) ---
@@ -437,16 +443,21 @@ def main():
             add("Medium", f"Keyword utama '{keywords[0]}' belum ada di salah satu subjudul H2.")
 
     # --- Kata absolut (overclaim): Low, minta diperhalus atau diberi sumber yang sekuat itu ---
+    # Baris judul dikecualikan: judul boleh retoris provokatif (aturan izinkan pertanyaan/kontras),
+    # yang dinilai adalah klaim di badan artikel.
     for i, l in enumerate(raw_lines):
+        if i == title_idx:
+            continue
         for m in OVERCLAIM.finditer(l):
             add("Low", f"Baris {i + 1}: kata absolut '{m.group(0)}'. Perhalus, atau pastikan sumber memang mengatakannya sekuat itu.")
 
-    # --- Buku klaim: setiap angka ber-satuan harus Terverifikasi ---
+    # --- Buku klaim: setiap angka ber-satuan harus Terverifikasi (di luar baris judul) ---
     def norm(num):
         return str(float(num.replace(",", ".")))
 
-    draft_measures = {norm(m.group(1)) for m in MEASURE.finditer("\n".join(raw_lines))}
-    draft_shown = {norm(m.group(1)): m.group(1) for m in MEASURE.finditer("\n".join(raw_lines))}
+    body_lines = [l for idx, l in enumerate(raw_lines) if idx != title_idx]
+    draft_measures = {norm(m.group(1)) for m in MEASURE.finditer("\n".join(body_lines))}
+    draft_shown = {norm(m.group(1)): m.group(1) for m in MEASURE.finditer("\n".join(body_lines))}
     if args.klaim:
         with open(args.klaim, encoding="utf-8") as kf:
             klaim_rows = [l.strip() for l in kf.read().splitlines() if l.strip().startswith("|")]
