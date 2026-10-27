@@ -31,6 +31,7 @@ import re
 import sys
 
 from docx import Document
+from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.opc.constants import RELATIONSHIP_TYPE as RT
 from docx.oxml import OxmlElement, parse_xml
@@ -250,6 +251,7 @@ def add_table(doc, rows):
 
     table = doc.add_table(rows=len(cells_rows), cols=ncols)
     table.style = doc.styles["Grid Table Light"]
+    table.alignment = WD_TABLE_ALIGNMENT.CENTER
     tbl_pr = table._tbl.tblPr
     tbl_w = tbl_pr.find(qn("w:tblW"))
     tbl_w.set(qn("w:w"), "0")
