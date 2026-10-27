@@ -1,9 +1,9 @@
-# [Judul Bebas, Boleh Berupa Pertanyaan, Maks 15 Kata / 110 Karakter]
+[Judul Bebas, Boleh Berupa Pertanyaan, Maks 15 Kata / 110 Karakter]
 
 ![](gambar-1.png)
 Gambar 1. [Deskripsi singkat gambar ASLI dari sumber: screenshot docs resmi, diagram vendor/paper, atau Commons berlisensi] (sumber: https://url-sumber-gambar)
 
-Hai, *Software Engineers*!
+Hai, Software Engineers!
 
 [Hook + konteks dalam SATU paragraf bila satu gagasan: adegan atau masalah sehari-hari, boleh "Bayangkan ...", "Pernahkah Anda ...?", atau fenomena konkret. Minimal 3 kalimat; di atas 8 kalimat pecah per pergeseran gagasan.]
 
@@ -24,6 +24,6 @@ Gambar 2. [Gambar pendukung: visual asli kedua ATAU ilustrasi penulis dengan cap
 
 ## Referensi
 
-<https://url-sumber-1>
-<https://url-sumber-2>
-<https://url-sumber-3>
+1. [Penyedia]. [Judul]. https://url-sumber-1
+2. [Penyedia]. [Judul]. https://url-sumber-2
+3. [Penyedia]. [Judul]. https://url-sumber-3

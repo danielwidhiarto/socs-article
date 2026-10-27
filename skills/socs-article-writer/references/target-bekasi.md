@@ -64,7 +64,7 @@ dan 20 judul lain (Agustus 2024–2026).
 - Heading diterima: `Referensi`, `References`, `Daftar Referensi`, `Daftar Pustaka` (tanpa teguran varian).
 - Entri boleh bare URL (`<https://...>`), numbered (`1. ...`), bullet, atau link judul — satu entri per baris, tiap entri wajib memuat URL (High jika tidak).
 - Tahun opsional, tidak dicek. Maksimal 8 entri (Low jika lebih); minimal 3 (High jika kurang).
-- URL tetap wajib diverifikasi bisa dibuka dan dicatat di buku klaim seperti SOCS.
+- Konvensi paket multi-artikel (Okt 2026, dari 5 artikel SE × AI): referensi selalu numbered (`1. Penyedia. Judul. URL`), bukan bare URL, agar konsisten antar artikel. Greeting pembuka selalu tegak (`Hai, Software Engineers!`), tanpa italic. Heading penutup bebas (boleh `## Kesimpulan`, boleh tanpa heading). Judul baris pertama tanpa awalan `#`.
 
 ## Yang tetap sama dari SOCS
 
