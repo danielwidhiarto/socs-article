@@ -1,6 +1,6 @@
 # Aturan Artikel SOCS BINUS (target default)
 
-Target default: SOCS (`socs.binus.ac.id/category/article`). Untuk kanal Bekasi CSSE (`binus.ac.id/bekasi/.../computer-science-software-engineering`), aturan ini dioverride oleh `target-bekasi.md`: sapaan `Anda` boleh, tanpa byline, figure `Gambar N.`, judul bebas maks 15 kata / 110 karakter, subjudul min 2, paragraf min 3 kalimat, referensi bebas 3–8 entri. Validator: `--target socs|bekasi`.
+Target default: SOCS (`socs.binus.ac.id/category/article`). Untuk kanal Bekasi CSSE (`binus.ac.id/bekasi/.../computer-science-software-engineering`), aturan ini dioverride oleh `target-bekasi.md`: sapaan `Anda` boleh, tanpa byline, figure `Gambar N.`, judul bebas maks 15 kata / 110 karakter, subjudul min 2, paragraf min 3 kalimat, referensi bebas 3–8 entri. Validator: `--target socs|bekasi` (nama flag CLI tetap `bekasi`).
 
 Tingkat keparahan: High = artikel gagal validasi. Medium = wajib diperbaiki. Low = saran.
 
@@ -175,4 +175,4 @@ Dokumen dibuat oleh `scripts/build_docx.py` dan meniru artikel acuan *Agentic Co
 - Referensi: heading tebal, entri rata kiri-kanan, judul miring, URL menjadi hyperlink dengan gaya Hyperlink (biru, garis bawah).
 - Byline: satu baris tebal, rata kiri-kanan.
 
-Catatan tentang artikel acuan (file *Agentic Coding* di folder `submitted`): isinya dobel, karena subjudul dan referensi muncul dua kali. Jangan memakainya sebagai acuan isi, hanya sebagai acuan format. Caption Figure 1-nya juga berbeda dari Figure 2 (ukuran dan spasi), dan itu tidak diikuti oleh builder.
+Catatan tentang artikel acuan (file *Agentic Coding* di folder `submitted/socs`): isinya dobel, karena subjudul dan referensi muncul dua kali. Jangan memakainya sebagai acuan isi, hanya sebagai acuan format. Caption Figure 1-nya juga berbeda dari Figure 2 (ukuran dan spasi), dan itu tidak diikuti oleh builder.

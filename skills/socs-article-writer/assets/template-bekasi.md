@@ -1,13 +1,13 @@
-# [Judul Bebas, Boleh Berupa Pertanyaan]
+# [Judul Bebas, Boleh Berupa Pertanyaan, Maks 15 Kata / 110 Karakter]
 
 ![](gambar-1.png)
 Gambar 1. [Deskripsi singkat gambar] (sumber: https://url-sumber-gambar)
 
 Hai, *Software Engineers*!
 
-[Hook: adegan atau masalah sehari-hari. Boleh "Bayangkan ...", "Pernahkah Anda ...?", atau fenomena konkret.]
+[Hook: adegan atau masalah sehari-hari. Boleh "Bayangkan ...", "Pernahkah Anda ...?", atau fenomena konkret. Minimal 3 kalimat.]
 
-[Paragraf konteks: apa yang dibahas dan kenapa penting sekarang. Minimal 3 kalimat per paragraf.]
+[Konteks: apa yang dibahas dan kenapa penting sekarang. Minimal 3 kalimat per paragraf.]
 
 ## [Subjudul 1: definisi atau konsep inti]
 

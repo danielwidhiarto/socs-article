@@ -219,8 +219,15 @@ def main():
         in_table = False
         prose.append((i + 1, stripped))
 
-    # --- Panjang ---
-    if word_count < 500:
+    # --- Panjang (SOCS 500-800; Bekasi 400-1100 dari 34 arsip published/bekasi-csse) ---
+    if bekasi:
+        if word_count < 400:
+            add("High", f"Panjang artikel {word_count} kata (minimum 400 untuk Bekasi).")
+        elif word_count > 1100:
+            add("High", f"Panjang artikel {word_count} kata (maksimum 1100 untuk Bekasi).")
+        elif not (600 <= word_count <= 800):
+            add("Low", f"Panjang artikel {word_count} kata (target ideal 600-700).")
+    elif word_count < 500:
         add("High", f"Panjang artikel {word_count} kata (minimum 500).")
     elif word_count > 800:
         add("High", f"Panjang artikel {word_count} kata (maksimum 800).")
@@ -325,7 +332,7 @@ def main():
     if code_found:
         add("Low", "Ada blok kode. Artikel ini explainer, bukan tutorial; batasi potongan kode kecil.")
 
-    # --- Byline: SOCS wajib; Bekasi tanpa byline (9/9 sampel, author = editorarticle) ---
+    # --- Byline: SOCS wajib; Bekasi tanpa byline (34/34 arsip tanpa 'Penulis:'; 2 file bawa sisa 'Author:' pola lama, jangan ditiru) ---
     if bekasi:
         for line_no, text in byline_check:
             add("Low", f"Baris {line_no}: Bekasi tidak memakai baris 'Penulis:' di badan artikel; hapus.")

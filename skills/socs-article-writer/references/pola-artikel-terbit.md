@@ -1,6 +1,6 @@
 # Pola Artikel yang Sudah Terbit
 
-Hasil ekstraksi 37 artikel `published/` dari file .docx. Dipakai sebagai contoh bentuk, bukan isi.
+Hasil ekstraksi 37 artikel `published/socs/` dari file .docx. Dipakai sebagai contoh bentuk, bukan isi.
 
 ## Angka
 

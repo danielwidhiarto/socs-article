@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
-"""Ubah draft Markdown artikel SOCS menjadi .docx dengan format yang meniru artikel acuan.
+"""Ubah draft Markdown artikel SOCS atau Bekasi CSSE menjadi .docx.
 
-Acuan formatting: artikel "Agentic Coding" (folder submitted). Kertas dibuat A4 sesuai kebutuhan redaksi.
+SOCS: format meniru artikel acuan "Agentic Coding" (folder submitted/socs), kertas A4.
+Bekasi CSSE: meniru pola dominan 34 arsip published/bekasi-csse (Pola A):
+judul Title tengah, subjudul Heading 2, caption 'Gambar N. ... (sumber: URL)',
+kertas Letter (21,59 x 27,94 cm), margin 2,54 cm. Tanpa baris byline.
 
 Pemakaian:
-    python build_docx.py draft.md keluaran.docx
+    python build_docx.py draft.md keluaran.docx [--target socs|bekasi]
 
 Sintaks Markdown yang didukung:
     # Judul                        judul, tengah, tebal (baris pertama)
     ## Subjudul                    subjudul tebal, rata kiri-kanan
     ## Referensi                   heading referensi; baris setelahnya = entri referensi
-    Penulis: Nama, Gelar - Jabatan  byline satu baris (dibuat tebal)
+    Penulis: Nama, Gelar - Jabatan  byline satu baris SOCS (dibuat tebal; Bekasi: tidak dipakai)
     ![](gambar.png){w=14.3cm}     gambar (path relatif terhadap file draft; w dan h opsional, dalam cm)
-    Figure N. deskripsi           caption figure
+    Gambar N. deskripsi (sumber: URL)  caption Bekasi (sumber inline atau di baris berikutnya)
+    Figure N. deskripsi            caption SOCS
     (https://sumber)              sumber figure di baris berikutnya, atau (AI Generated)
     | Kolom | Kolom |             tabel pipa; baris pertama = header (tebal)
     - item                        bullet
@@ -46,6 +50,7 @@ RE_INLINE_SOURCE = re.compile(r"^(.*?)\(\s*sumber:\s*(https?://\S+?)\)\s*$", re.
 RE_BULLET = re.compile(r"^[-*+]\s+(.*)$")
 RE_NUMBER = re.compile(r"^\d+\.\s+(.*)$")
 RE_INLINE = re.compile(r"(\*\*.+?\*\*|(?<!\*)\*[^*\s][^*]*?\*(?!\*)|https?://[^\s)]+)")
+RE_TABLE_SEP = re.compile(r"^\s*\|?[\s:\-|]+\|?\s*$")
 
 # Penomoran: abstractNum 100 = bullet, 101 = desimal. Nilainya meniru artikel acuan.
 ABSTRACT_BULLET = (
@@ -297,7 +302,8 @@ def new_decimal_num(doc, counter):
     return num_id
 
 
-def build(md_path, out_path):
+def build(md_path, out_path, target="socs"):
+    bekasi = target == "bekasi"
     base_dir = os.path.dirname(os.path.abspath(md_path))
     with open(md_path, encoding="utf-8") as f:
         blocks = parse_blocks(f.read().splitlines())
@@ -308,14 +314,15 @@ def build(md_path, out_path):
         if child.tag != qn("w:sectPr"):
             body.remove(child)
 
-    # Kertas A4, margin 2,54 cm, header dan footer 1,27 cm seperti artikel acuan.
+    # Kertas: SOCS A4 sesuai kebutuhan redaksi; Bekasi CSSE Letter (21,59 x 27,94 cm)
+    # sesuai 34 arsip published/bekasi-csse.
     sec = doc.sections[0]
-    sec.page_width = Mm(210)
-    sec.page_height = Mm(297)
-    for side in ("left_margin", "right_margin", "top_margin", "bottom_margin"):
-        setattr(sec, side, Inches(1))
-    sec.header_distance = Inches(0.5)
-    sec.footer_distance = Inches(0.5)
+    if bekasi:
+        sec.page_width = Inches(8.5)
+        sec.page_height = Inches(11)
+    else:
+        sec.page_width = Mm(210)
+        sec.page_height = Mm(297)
 
     normal = doc.styles["Normal"]
     normal.font.name = FONT
@@ -349,17 +356,25 @@ def build(md_path, out_path):
             num_id = NUM_DECIMAL_BASE + decimal_counter
 
         if kind == "title":
-            p = doc.add_paragraph()
-            p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-            p.paragraph_format.line_spacing = 1.5
-            add_inline(p, value, bold=True)
+            if bekasi:
+                p = doc.add_paragraph(style="Title")
+                p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            else:
+                p = doc.add_paragraph()
+                p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                p.paragraph_format.line_spacing = 1.5
+            add_inline(p, value, bold=(not bekasi))
             cp.title = value
 
         elif kind == "heading":
-            p = doc.add_paragraph()
-            p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
-            set_auto_spacing(p)
-            add_inline(p, value, bold=True)
+            if bekasi:
+                p = doc.add_paragraph(style="Heading 2")
+                add_inline(p, value)
+            else:
+                p = doc.add_paragraph()
+                p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+                set_auto_spacing(p)
+                add_inline(p, value, bold=True)
 
         elif kind == "byline":
             p = doc.add_paragraph()
@@ -382,12 +397,22 @@ def build(md_path, out_path):
             p.add_run().add_picture(img_path, width=width, height=height)
 
         elif kind == "caption":
+            if bekasi:
+                p = doc.add_paragraph(style="Caption")
+                add_inline(p, value)
+                continue
             p = doc.add_paragraph()
             p.alignment = WD_ALIGN_PARAGRAPH.CENTER
             set_auto_spacing(p)
             add_inline(p, value, size_pt=CAPTION_PT)
 
         elif kind == "source":
+            if bekasi:
+                # Sumber inline sudah menyatu di caption ('Gambar N. ... (sumber: URL)');
+                # baris sumber terpisah tetap dirender di bawah caption.
+                p = doc.add_paragraph(style="Caption")
+                add_inline(p, value)
+                continue
             p = doc.add_paragraph()
             p.alignment = WD_ALIGN_PARAGRAPH.CENTER
             set_auto_spacing(p)
@@ -406,6 +431,12 @@ def build(md_path, out_path):
             set_auto_spacing(spacer)
 
         elif kind == "bullet":
+            if bekasi:
+                p = doc.add_paragraph(style="List Paragraph")
+                p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+                add_inline(p, value)
+                prev_kind = kind
+                continue
             p = doc.add_paragraph()
             p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
             set_auto_spacing(p)
@@ -413,6 +444,12 @@ def build(md_path, out_path):
             add_inline(p, value)
 
         elif kind == "number":
+            if bekasi:
+                p = doc.add_paragraph(style="List Paragraph")
+                p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+                add_inline(p, value)
+                prev_kind = kind
+                continue
             p = doc.add_paragraph()
             p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
             set_auto_spacing(p)
@@ -420,6 +457,12 @@ def build(md_path, out_path):
             add_inline(p, value)
 
         elif kind == "ref":
+            if bekasi:
+                # Arsip Bekasi: referensi numbered/bare URL, tanpa hyperlink aktif.
+                p = doc.add_paragraph(style="List Paragraph")
+                add_inline(p, value)
+                prev_kind = kind
+                continue
             p = doc.add_paragraph()
             p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
             set_auto_spacing(p)
@@ -440,11 +483,15 @@ def build(md_path, out_path):
 
 
 def main():
-    if len(sys.argv) != 3:
-        print(__doc__)
-        return 2
-    build(sys.argv[1], sys.argv[2])
-    print(f"Tersimpan: {sys.argv[2]}")
+    import argparse
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("draft")
+    ap.add_argument("output")
+    ap.add_argument("--target", default="socs", choices=("socs", "bekasi"),
+                    help="Target redaksi: socs (default, kertas A4) atau bekasi (kertas Letter)")
+    args = ap.parse_args()
+    build(args.draft, args.output, args.target)
+    print(f"Tersimpan: {args.output}")
     return 0
 
 

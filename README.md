@@ -5,8 +5,7 @@ Repo untuk menulis artikel teknologi untuk website SOCS BINUS (https://socs.binu
 ## Isi repo
 
 - `skills/socs-article-writer/`: skill untuk AI agent. Agent membantu menentukan topik, riset dan verifikasi sumber, menulis draft, dan memvalidasi draft terhadap aturan artikel.
-- `published/` dan `submitted/`: arsip artikel pribadi. Folder ini di-ignore dan tidak ikut di repo.
-- `drafts/`: tempat draft yang dibuat agent. Folder ini juga di-ignore.
+- `published/socs/`, `submitted/socs/`, dan `drafts/socs/`: arsip + draft artikel SOCS pribadi. `drafts/bekasi-csse/`, `submitted/bekasi-csse/`, `published/bekasi-csse/`: sama untuk Bekasi CSSE. Semua folder ini di-ignore dan tidak ikut di repo.
 
 ## Memasang skill
 
@@ -56,25 +55,26 @@ Pemasangan lewat `npx skills add` juga tersedia untuk beberapa agent, tetapi bel
 
 ## Cara pakai
 
-Setelah skill terpasang, minta agent menulis artikel SOCS atau Bekasi (agent menanyakan target dulu; default SOCS). Untuk SOCS, agent akan menanyakan nama lengkap, gelar, dan jabatan penulis, lalu menyimpannya di `penulis.local.md` di root workspace. File ini di-ignore git, jadi tidak ikut di-commit. Validator juga akan menolak artikel yang masih berisi placeholder seperti `[Nama]`. Untuk Bekasi, penulis tidak ditanya karena badan artikel tanpa byline.
+Setelah skill terpasang, minta agent menulis artikel SOCS atau Bekasi CSSE (agent menanyakan target dulu; default SOCS). Untuk SOCS, agent akan menanyakan nama lengkap, gelar, dan jabatan penulis, lalu menyimpannya di `penulis.local.md` di root workspace. File ini di-ignore git, jadi tidak ikut di-commit. Validator juga akan menolak artikel yang masih berisi placeholder seperti `[Nama]`. Untuk Bekasi CSSE, penulis tidak ditanya karena badan artikel tanpa byline.
 
 Untuk memvalidasi draft secara manual (butuh Python 3, tanpa library tambahan):
 
 ```
-python skills/socs-article-writer/scripts/validate_article.py "drafts/<judul>.md" --target socs --keywords "kata1,kata2"
-(Untuk Bekasi: tambah `--target bekasi`. Aturan override ada di `skills/socs-article-writer/references/target-bekasi.md`, template di `assets/template-bekasi.md`.)
+python skills/socs-article-writer/scripts/validate_article.py "drafts/socs/<judul>.md" --target socs --keywords "kata1,kata2"
+```
 
 Untuk membuat file Word dari draft Markdown (butuh `pip install python-docx==1.2.0`):
 
 ```
-python skills/socs-article-writer/scripts/build_docx.py "drafts/<judul>/<judul>.md" "drafts/<judul>/<judul>.docx"
+python skills/socs-article-writer/scripts/build_docx.py "drafts/socs/<judul>/<judul>.md" "drafts/socs/<judul>/<judul>.docx"
+python skills/socs-article-writer/scripts/build_docx.py "drafts/bekasi-csse/<judul>/<judul>.md" "drafts/bekasi-csse/<judul>.docx" --target bekasi
 ```
 
-Format Word meniru artikel acuan *Agentic Coding* dengan kertas A4. Builder tidak memakai file artikel terbit, jadi repo ini tidak menyimpan contoh .docx apa pun. Builder menerima caption `Gambar N.` dan sumber `(sumber: URL)` untuk kedua target.
+Format Word SOCS meniru artikel acuan *Agentic Coding* dengan kertas A4. Format Bekasi CSSE meniru pola dominan 34 arsip `published/bekasi-csse/`: judul style Title tengah, subjudul Heading 2, caption `Gambar N.`, kertas Letter (21,59 × 27,94 cm). Builder tidak memakai file artikel terbit, jadi repo ini tidak menyimpan contoh .docx apa pun. Builder menerima caption `Gambar N.` dan sumber `(sumber: URL)` untuk kedua target.
 
 ## Aturan artikel
 
-Aturan lengkap ada di `skills/socs-article-writer/references/aturan.md` (target SOCS). Override Bekasi ada di `skills/socs-article-writer/references/target-bekasi.md`. Contoh artikel yang sudah terbit ada di `skills/socs-article-writer/references/pola-artikel-terbit.md` (SOCS).
+Aturan lengkap ada di `skills/socs-article-writer/references/aturan.md` (target SOCS). Override Bekasi CSSE ada di `skills/socs-article-writer/references/target-bekasi.md`. Contoh artikel yang sudah terbit ada di `skills/socs-article-writer/references/pola-artikel-terbit.md` (SOCS).
 
 ## Kredit
 
