@@ -92,7 +92,7 @@ HYPERLINK_STYLE = (
 )
 
 
-def parse_blocks(lines):
+def parse_blocks(lines, bekasi=False):
     """Ubah baris Markdown menjadi daftar blok (jenis, isi)."""
     blocks = []
     in_refs = False
@@ -124,18 +124,24 @@ def parse_blocks(lines):
             continue
         m = RE_CAPTION_ANY.match(s)
         if m:
+            label = "Gambar" if bekasi else "Figure"
             tail = m.group(2).strip()
             inline = RE_INLINE_SOURCE.match(tail)
             if inline:
-                blocks.append(("caption", f"Gambar {m.group(1)}. {inline.group(1).strip()}"))
-                blocks.append(("source", f"(sumber: {inline.group(2)})"))
+                blocks.append(("caption", f"{label} {m.group(1)}. {inline.group(1).strip()}"))
+                src = f"(sumber: {inline.group(2)})" if bekasi else f"({inline.group(2)})"
+                blocks.append(("source", src))
             else:
-                # Normalisasi label ke 'Gambar N.' agar konsisten dengan redaksi Bekasi.
-                blocks.append(("caption", f"Gambar {m.group(1)}. {tail}"))
+                # Label caption mengikuti target: 'Figure N.' (SOCS) vs 'Gambar N.' (Bekasi).
+                blocks.append(("caption", f"{label} {m.group(1)}. {tail}"))
             continue
         if RE_SOURCE_ANY.match(s):
             url = RE_SOURCE_ANY.match(s).group(1)
-            blocks.append(("source", f"(sumber: {url})" if not s.lower().startswith("(sumber:") else s))
+            if bekasi:
+                blocks.append(("source", f"(sumber: {url})" if not s.lower().startswith("(sumber:") else s))
+            else:
+                # SOCS: baris sumber polos '(URL)'.
+                blocks.append(("source", f"({url})"))
             continue
         if s.startswith("|"):
             rows = [s]
@@ -306,7 +312,7 @@ def build(md_path, out_path, target="socs"):
     bekasi = target == "bekasi"
     base_dir = os.path.dirname(os.path.abspath(md_path))
     with open(md_path, encoding="utf-8") as f:
-        blocks = parse_blocks(f.read().splitlines())
+        blocks = parse_blocks(f.read().splitlines(), bekasi)
 
     doc = Document()
     body = doc.element.body
