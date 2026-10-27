@@ -19,7 +19,7 @@ dan 20 judul lain (Agustus 2024–2026).
 | Sapaan | `kamu/kita`, `Anda` = Low | `Anda`/`kamu` bebas; greeting `Hai, Software Engineers!` hanya 17/34 Word. Validator tidak mengecek |
 | Pembuka | Hook adegan/fenomena | Sama, boleh didahului sapaan `Hai, Software Engineers!` |
 | Figure | `Figure N.` + baris `(URL)` terpisah, 2–4 gambar | `Gambar 1. Deskripsi (sumber: URL)` satu baris; 1 gambar dominan (28/34); caption inline; sumber boleh `(sumber: URL)` |
-| Sebutan figure di badan | Wajib (Low jika tidak) | Tidak wajib, tidak dicek |
+| Sebutan figure di badan | Wajib (Low jika tidak) | Wajib: setiap gambar disebut min 1x di kalimat (`Gambar N`), Low per gambar yang tak disebut |
 | Tabel | Dianjurkan | Dianjurkan (sama; 32/34 tanpa tabel; `Unit Test` dan `Agile Hybrid` punya 1) |
 | Byline | Wajib `Penulis: Nama, Gelar – Jabatan` | Tidak ada (34/34 tanpa `Penulis:`; author web = `editorarticle`). 2 file bawa sisa `Author:` pola lama, jangan ditiru. Penulis tidak perlu ditanya |
 | Referensi | Format ketat, 3–7, tahun wajib | Bebas: bare URL, numbered, atau link judul; 3–8; tahun opsional. Heading campur (`References` 18, `Referensi` 10, varian lain 6); URL teks polos, bukan hyperlink aktif |

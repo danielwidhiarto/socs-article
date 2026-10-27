@@ -304,6 +304,12 @@ def main():
                 add("Medium", f"Penomoran figure tidak berurutan: {numbers}.")
         if len(captions) > 6:
             add("Low", f"Figure {len(captions)} (umumnya 1-6 untuk Bekasi).")
+        # Setiap gambar wajib disebut di kalimat (target-bekasi.md): 'Gambar N' min 1x per gambar.
+        body_text = "\n".join(t for _, t in prose)
+        for n in numbers:
+            mentions = len(re.findall(rf"(?:Gambar|Figure)\s+{n}\b", body_text, re.IGNORECASE))
+            if mentions == 0:
+                add("Low", f"Gambar {n} tidak pernah disebut di kalimat artikel; tambahkan rujukan seperti 'seperti pada Gambar {n}' di paragraf yang membahasnya.")
     else:
         if not captions:
             add("Medium", "Figure 1 wajib ada (tidak ditemukan caption Figure).")
