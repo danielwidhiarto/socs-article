@@ -1,6 +1,6 @@
 # socs-article
 
-Repo untuk menulis artikel teknologi untuk website SOCS BINUS: https://socs.binus.ac.id/category/article/
+Repo untuk menulis artikel teknologi untuk website SOCS BINUS (https://socs.binus.ac.id/category/article/) dan kanal BINUS @Bekasi CSSE (https://binus.ac.id/bekasi/category/article/computer-science-software-engineering/).
 
 ## Isi repo
 
@@ -56,13 +56,13 @@ Pemasangan lewat `npx skills add` juga tersedia untuk beberapa agent, tetapi bel
 
 ## Cara pakai
 
-Setelah skill terpasang, minta agent menulis artikel SOCS. Sebelum menulis, agent akan menanyakan nama lengkap, gelar, dan jabatan penulis, lalu menyimpannya di `penulis.local.md` di root workspace. File ini di-ignore git, jadi tidak ikut di-commit. Validator juga akan menolak artikel yang masih berisi placeholder seperti `[Nama]`.
+Setelah skill terpasang, minta agent menulis artikel SOCS atau Bekasi (agent menanyakan target dulu; default SOCS). Untuk SOCS, agent akan menanyakan nama lengkap, gelar, dan jabatan penulis, lalu menyimpannya di `penulis.local.md` di root workspace. File ini di-ignore git, jadi tidak ikut di-commit. Validator juga akan menolak artikel yang masih berisi placeholder seperti `[Nama]`. Untuk Bekasi, penulis tidak ditanya karena badan artikel tanpa byline.
 
 Untuk memvalidasi draft secara manual (butuh Python 3, tanpa library tambahan):
 
 ```
-python skills/socs-article-writer/scripts/validate_article.py "drafts/<judul>.md" --keywords "kata1,kata2"
-```
+python skills/socs-article-writer/scripts/validate_article.py "drafts/<judul>.md" --target socs --keywords "kata1,kata2"
+(Untuk Bekasi: tambah `--target bekasi`. Aturan override ada di `skills/socs-article-writer/references/target-bekasi.md`, template di `assets/template-bekasi.md`.)
 
 Untuk membuat file Word dari draft Markdown (butuh `pip install python-docx==1.2.0`):
 
@@ -70,11 +70,11 @@ Untuk membuat file Word dari draft Markdown (butuh `pip install python-docx==1.2
 python skills/socs-article-writer/scripts/build_docx.py "drafts/<judul>/<judul>.md" "drafts/<judul>/<judul>.docx"
 ```
 
-Format Word meniru artikel acuan *Agentic Coding* dengan kertas A4. Builder tidak memakai file artikel terbit, jadi repo ini tidak menyimpan contoh .docx apa pun.
+Format Word meniru artikel acuan *Agentic Coding* dengan kertas A4. Builder tidak memakai file artikel terbit, jadi repo ini tidak menyimpan contoh .docx apa pun. Builder menerima caption `Gambar N.` dan sumber `(sumber: URL)` untuk kedua target.
 
 ## Aturan artikel
 
-Aturan lengkap ada di `skills/socs-article-writer/references/aturan.md`. Contoh artikel yang sudah terbit ada di `skills/socs-article-writer/references/pola-artikel-terbit.md`.
+Aturan lengkap ada di `skills/socs-article-writer/references/aturan.md` (target SOCS). Override Bekasi ada di `skills/socs-article-writer/references/target-bekasi.md`. Contoh artikel yang sudah terbit ada di `skills/socs-article-writer/references/pola-artikel-terbit.md` (SOCS).
 
 ## Kredit
 

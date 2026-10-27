@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Validasi draft artikel SOCS BINUS (format Markdown) terhadap references/aturan.md.
+"""Validasi draft artikel SOCS BINUS atau BINUS @Bekasi CSSE (format Markdown).
+Aturan SOCS: references/aturan.md. Override Bekasi: references/target-bekasi.md.
 
 Pemakaian:
-    python validate_article.py draft.md [--keywords "kata1,kata2"] [--klaim klaim.md]
+    python validate_article.py draft.md [--target socs|bekasi] [--keywords "kata1,kata2"] [--klaim klaim.md]
 
 Jika --klaim diberikan, angka ber-satuan (%, persen, ms, detik, GB, kali, dst.) di draft
 harus ada di baris buku klaim berstatus "Terverifikasi". Format tabel klaim:
@@ -16,8 +17,17 @@ import re
 import sys
 from collections import Counter
 
-CAPTION_DOT = re.compile(r"^Figure\s+(\d+)\.\s")  # format wajib (artikel acuan): 'Figure N. deskripsi'
-CAPTION_COLON = re.compile(r"^Figure\s+(\d+):\s")  # tidak sesuai format, ditandai Medium
+CAPTION_DOT = re.compile(r"^Figure\s+(\d+)\.\s")  # format wajib SOCS (artikel acuan): 'Figure N. deskripsi'
+CAPTION_COLON = re.compile(r"^Figure\s+(\d+):\s")  # tidak sesuai format SOCS, ditandai Medium
+CAPTION_ANY_DOT = re.compile(r"^(?:Figure|Gambar)\s+(\d+)\.\s", re.IGNORECASE)
+CAPTION_ANY_COLON = re.compile(r"^(?:Figure|Gambar)\s+(\d+):\s", re.IGNORECASE)
+INLINE_SOURCE = re.compile(r"\(\s*sumber:\s*https?://\S+[^)]*\)", re.IGNORECASE)
+SOURCE_BEKASI = re.compile(r"^\(\s*(?:sumber:\s*)?(https?://\S+|AI Generated)\)$", re.IGNORECASE)
+BOLD_LEAD = re.compile(r"^\*\*(.+?)\*\*\s+\S")
+REF_HEADINGS = ("referensi", "references", "daftar referensi", "daftar pustaka")
+def is_refs_heading(text):
+    t = text.strip().lower()
+    return t in REF_HEADINGS or t.startswith("referensi") or t.startswith("references")
 SOURCE = re.compile(r"^\((https?://\S+|AI Generated)\)$")
 IMAGE = re.compile(r"^!\[[^\]]*\]\([^)]+\)")
 BYLINE_LINE = re.compile(r"^Penulis:")
@@ -91,9 +101,12 @@ def main():
     sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser()
     ap.add_argument("draft")
+    ap.add_argument("--target", default="socs", choices=("socs", "bekasi"),
+                    help="Target redaksi: socs (default) atau bekasi (override target-bekasi.md)")
     ap.add_argument("--keywords", default="", help="Keyword yang wajib muncul, dipisah koma")
     ap.add_argument("--klaim", default="", help="Path buku klaim (klaim.md) untuk memeriksa angka")
     args = ap.parse_args()
+    bekasi = args.target == "bekasi"
 
     with open(args.draft, encoding="utf-8") as f:
         raw_lines = f.read().splitlines()
@@ -109,12 +122,18 @@ def main():
         return 1
     title = raw_lines[title_idx].lstrip("#").strip().replace("**", "")
     title_words = len(title.split())
-    if title_words > 10:
-        add("Medium", f"Judul {title_words} kata (maks 10).")
-    if len(title) > 70:
-        add("Medium", f"Judul {len(title)} karakter (maks 70).")
-    if ":" not in title:
-        add("Low", "Judul sebaiknya format 'Nama Teknologi: Tagline' (tanda ':' belum ada).")
+    if bekasi:
+        if title_words > 15:
+            add("Low", f"Judul {title_words} kata (maks 15 untuk Bekasi).")
+        if len(title) > 110:
+            add("Low", f"Judul {len(title)} karakter (maks 110 untuk Bekasi).")
+    else:
+        if title_words > 10:
+            add("Medium", f"Judul {title_words} kata (maks 10).")
+        if len(title) > 70:
+            add("Medium", f"Judul {len(title)} karakter (maks 70).")
+        if ":" not in title:
+            add("Low", "Judul sebaiknya format 'Nama Teknologi: Tagline' (tanda ':' belum ada).")
 
     # Hitungan kata seperti Word: semua teks dihitung sekali, kecuali baris tabel pemisah dan blok kode.
     word_count = 0
@@ -159,9 +178,12 @@ def main():
         if m:
             text = m.group(2).strip()
             headings.append((len(m.group(1)), text, i + 1))
-            in_refs = text.lower().startswith("referensi")
-            if in_refs and text.lower() != "referensi":
-                refs_heading_line = i + 1
+            if is_refs_heading(text):
+                in_refs = True
+                if text.lower() not in REF_HEADINGS:
+                    refs_heading_line = i + 1
+            else:
+                in_refs = False
             continue
 
         if BYLINE_LINE.match(stripped):
@@ -173,14 +195,16 @@ def main():
             refs_entries.append((i + 1, stripped))
             continue
 
-        if CAPTION_DOT.match(stripped) or CAPTION_COLON.match(stripped):
+        cap = ((CAPTION_ANY_DOT.match(stripped) or CAPTION_ANY_COLON.match(stripped))
+               if bekasi else (CAPTION_DOT.match(stripped) or CAPTION_COLON.match(stripped)))
+        if cap:
             captions.append((i + 1, stripped))
             continue
 
         if IMAGE.match(stripped):
             continue
 
-        if SOURCE.match(stripped):
+        if SOURCE.match(stripped) or (bekasi and SOURCE_BEKASI.match(stripped)):
             continue
 
         if stripped.startswith("|"):
@@ -203,9 +227,14 @@ def main():
     elif not (600 <= word_count <= 700):
         add("Low", f"Panjang artikel {word_count} kata (target ideal 600-700).")
 
-    # --- Subjudul ---
+    # --- Subjudul (SOCS: min 3 H2/H3; Bekasi: min 2, level bebas + bold-lead) ---
     h2h3 = [h for h in headings if h[0] in (2, 3)]
-    if len(h2h3) < 3:
+    if bekasi:
+        bold_leads = [t for _, t in prose if BOLD_LEAD.match(t)]
+        h_all = [h for h in headings if h[0] in (1, 2, 3)]
+        if len(h_all) + len(bold_leads) < 2:
+            add("Medium", f"Subjudul hanya {len(h_all) + len(bold_leads)} (minimum 2 untuk Bekasi).")
+    elif len(h2h3) < 3:
         add("High", f"Subjudul H2/H3 hanya {len(h2h3)} (minimum 3).")
 
     # --- Paragraf berurutan tidak boleh diawali kata yang sama ---
@@ -220,15 +249,18 @@ def main():
             add("Medium", f"Baris {line_no}: paragraf berurutan diawali kata '{first}' yang sama.")
         prev_first = first
 
-    # --- Paragraf minimal 5 kalimat (aturan.md bagian 4) ---
+    # --- Paragraf minimal 5 kalimat SOCS / 3 kalimat Bekasi (aturan.md bagian 4) ---
+    para_min = 3 if bekasi else 5
     for line_no, text in prose:
         if LIST_ITEM.match(text) or text.startswith("|"):
             continue
+        if BOLD_LEAD.match(text) and bekasi:
+            text = BOLD_LEAD.sub("", text, count=1)
         if text.rstrip().endswith(":"):
             continue  # kalimat pengantar sebelum daftar bullet atau tabel
         n_sent = count_sentences(text)
-        if n_sent < 5:
-            add("Medium", f"Baris {line_no}: paragraf hanya {n_sent} kalimat (minimal 5; lengkapi di paragraf yang sama sebelum memulai paragraf baru).")
+        if n_sent < para_min:
+            add("Medium", f"Baris {line_no}: paragraf hanya {n_sent} kalimat (minimal {para_min}; lengkapi di paragraf yang sama sebelum memulai paragraf baru).")
 
     # --- Hook pembuka ---
     if prose:
@@ -238,33 +270,54 @@ def main():
         ):
             add("Low", "Pembuka sebaiknya dimulai adegan/fenomena konkret, misalnya 'Bayangkan ...' atau 'Pernahkah ...'.")
 
-    # --- Figure: caption 'Figure N: ...' diikuti baris '(URL)' atau '(AI Generated)' ---
-    if not captions:
-        add("Medium", "Figure 1 wajib ada (tidak ditemukan caption Figure).")
-    numbers = []
-    for line_no, line in captions:
-        if CAPTION_COLON.match(line):
-            add("Medium", f"Baris {line_no}: caption memakai ':' setelah nomor, format wajib 'Figure N. deskripsi'.")
-        numbers.append(int((CAPTION_DOT.match(line) or CAPTION_COLON.match(line)).group(1)))
-        # Sumber figure harus di baris berikutnya yang tidak kosong.
-        next_line = next((l.strip() for l in raw_lines[line_no:line_no + 2] if l.strip()), "")
-        if not SOURCE.match(next_line):
-            add("Medium", f"Baris {line_no}: sumber figure harus di baris berikutnya dalam kurung, misalnya '(https://...)' atau '(AI Generated)'.")
-    if numbers:
-        if numbers[0] != 1:
-            add("Medium", f"Penomoran figure dimulai dari {numbers[0]}, harus dari 1.")
-        if numbers != list(range(1, len(numbers) + 1)):
-            add("Medium", f"Penomoran figure tidak berurutan: {numbers}.")
-        # Setiap figure harus disebut di kalimat artikel, bukan hanya di caption (aturan.md bagian 6).
-        body_text = "\n".join(t for _, t in prose)
-        for n in numbers:
-            mentions = len(re.findall(rf"Figure\s+{n}\b", body_text))
-            if mentions == 0:
-                add("Low", f"Figure {n} tidak pernah disebut di kalimat artikel; tambahkan rujukan seperti 'seperti pada Figure {n}' di paragraf yang membahasnya.")
-    if captions and len(captions) < 2:
-        add("Low", "Disarankan 2-4 figure (saat ini hanya 1).")
-    if len(captions) > 4:
-        add("Low", f"Figure {len(captions)} (disarankan maksimal 4).")
+    # --- Figure: SOCS 'Figure N.' + baris '(URL)'; Bekasi 'Gambar N.' + sumber inline/(sumber:) ---
+    if bekasi:
+        if not captions:
+            add("Medium", "Gambar 1 wajib ada untuk Bekasi (tidak ditemukan caption Gambar/Figure).")
+        numbers = []
+        for line_no, line in captions:
+            if CAPTION_ANY_COLON.match(line):
+                add("Medium", f"Baris {line_no}: caption memakai ':' setelah nomor, format wajib 'Gambar N. deskripsi'.")
+            numbers.append(int((CAPTION_ANY_DOT.match(line) or CAPTION_ANY_COLON.match(line)).group(1)))
+            if INLINE_SOURCE.search(line):
+                continue  # sumber inline: 'Gambar 1. ... (sumber: URL)'
+            next_line = next((l.strip() for l in raw_lines[line_no:line_no + 2] if l.strip()), "")
+            if not SOURCE_BEKASI.match(next_line):
+                add("Low", f"Baris {line_no}: sumber figure sebaiknya di baris berikutnya '(URL)' atau '(sumber: URL)', atau inline '(sumber: URL)'.")
+        if numbers:
+            if numbers[0] != 1:
+                add("Medium", f"Penomoran figure dimulai dari {numbers[0]}, harus dari 1.")
+            if numbers != list(range(1, len(numbers) + 1)):
+                add("Medium", f"Penomoran figure tidak berurutan: {numbers}.")
+        if len(captions) > 6:
+            add("Low", f"Figure {len(captions)} (umumnya 1-6 untuk Bekasi).")
+    else:
+        if not captions:
+            add("Medium", "Figure 1 wajib ada (tidak ditemukan caption Figure).")
+        numbers = []
+        for line_no, line in captions:
+            if CAPTION_COLON.match(line):
+                add("Medium", f"Baris {line_no}: caption memakai ':' setelah nomor, format wajib 'Figure N. deskripsi'.")
+            numbers.append(int((CAPTION_DOT.match(line) or CAPTION_COLON.match(line)).group(1)))
+            # Sumber figure harus di baris berikutnya yang tidak kosong.
+            next_line = next((l.strip() for l in raw_lines[line_no:line_no + 2] if l.strip()), "")
+            if not SOURCE.match(next_line):
+                add("Medium", f"Baris {line_no}: sumber figure harus di baris berikutnya dalam kurung, misalnya '(https://...)' atau '(AI Generated)'.")
+        if numbers:
+            if numbers[0] != 1:
+                add("Medium", f"Penomoran figure dimulai dari {numbers[0]}, harus dari 1.")
+            if numbers != list(range(1, len(numbers) + 1)):
+                add("Medium", f"Penomoran figure tidak berurutan: {numbers}.")
+            # Setiap figure harus disebut di kalimat artikel, bukan hanya di caption (aturan.md bagian 6).
+            body_text = "\n".join(t for _, t in prose)
+            for n in numbers:
+                mentions = len(re.findall(rf"Figure\s+{n}\b", body_text))
+                if mentions == 0:
+                    add("Low", f"Figure {n} tidak pernah disebut di kalimat artikel; tambahkan rujukan seperti 'seperti pada Figure {n}' di paragraf yang membahasnya.")
+        if captions and len(captions) < 2:
+            add("Low", "Disarankan 2-4 figure (saat ini hanya 1).")
+        if len(captions) > 4:
+            add("Low", f"Figure {len(captions)} (disarankan maksimal 4).")
 
     # --- Tabel dan blok kode ---
     if table_count == 0:
@@ -272,29 +325,48 @@ def main():
     if code_found:
         add("Low", "Ada blok kode. Artikel ini explainer, bukan tutorial; batasi potongan kode kecil.")
 
-    # --- Byline: 'Penulis:' lalu baris 'Nama, Gelar - Jabatan' ---
-    if not byline_check:
-        add("Medium", "Baris 'Penulis:' tidak ditemukan di bagian penutup.")
-    for line_no, text in byline_check:
-        if not BYLINE_OK.match(text):
-            add("Medium", f"Baris {line_no}: format byline harus 'Penulis: Nama, Gelar – Jabatan' dalam satu baris, dengan en dash.")
+    # --- Byline: SOCS wajib; Bekasi tanpa byline (9/9 sampel, author = editorarticle) ---
+    if bekasi:
+        for line_no, text in byline_check:
+            add("Low", f"Baris {line_no}: Bekasi tidak memakai baris 'Penulis:' di badan artikel; hapus.")
+    else:
+        if not byline_check:
+            add("Medium", "Baris 'Penulis:' tidak ditemukan di bagian penutup.")
+        for line_no, text in byline_check:
+            if not BYLINE_OK.match(text):
+                add("Medium", f"Baris {line_no}: format byline harus 'Penulis: Nama, Gelar – Jabatan' dalam satu baris, dengan en dash.")
 
-    # --- Referensi ---
-    if not any(h[1].lower().startswith("referensi") for h in headings):
-        add("High", "Bagian 'Referensi' tidak ditemukan.")
-    if refs_heading_line is not None:
-        add("Medium", f"Baris {refs_heading_line}: heading 'Referensi' menempel dengan isi. Pisahkan jadi baris sendiri.")
-    if len(refs_entries) < 3:
-        add("High", f"Referensi hanya {len(refs_entries)} entri (minimum 3).")
-    elif len(refs_entries) > 7:
-        add("Medium", f"Referensi {len(refs_entries)} entri (maksimum 7).")
-    for line_no, entry in refs_entries:
-        if len(re.findall(r"https?://", entry)) > 1:
-            add("Medium", f"Baris {line_no}: lebih dari satu referensi dalam satu baris, pisahkan.")
-        if not URL.search(entry):
-            add("High", f"Baris {line_no}: referensi tanpa URL.")
-        if not YEAR.search(entry):
-            add("Medium", f"Baris {line_no}: referensi tanpa tahun.")
+    # --- Referensi (Bekasi: heading bebas, format bebas, tahun opsional, maks 8) ---
+    if bekasi:
+        if not any(is_refs_heading(h[1]) for h in headings if h[0] in (1, 2)):
+            add("High", "Bagian 'Referensi' tidak ditemukan (diterima: Referensi, References, Daftar Referensi, Daftar Pustaka).")
+        if refs_heading_line is not None:
+            add("Medium", f"Baris {refs_heading_line}: heading referensi menempel dengan isi. Pisahkan jadi baris sendiri.")
+        if len(refs_entries) < 3:
+            add("High", f"Referensi hanya {len(refs_entries)} entri (minimum 3).")
+        elif len(refs_entries) > 8:
+            add("Low", f"Referensi {len(refs_entries)} entri (umumnya 3-8 untuk Bekasi).")
+        for line_no, entry in refs_entries:
+            if len(re.findall(r"https?://", entry)) > 1:
+                add("Medium", f"Baris {line_no}: lebih dari satu referensi dalam satu baris, pisahkan.")
+            if not URL.search(entry):
+                add("High", f"Baris {line_no}: referensi tanpa URL.")
+    else:
+        if not any(h[1].lower().startswith("referensi") for h in headings):
+            add("High", "Bagian 'Referensi' tidak ditemukan.")
+        if refs_heading_line is not None:
+            add("Medium", f"Baris {refs_heading_line}: heading 'Referensi' menempel dengan isi. Pisahkan jadi baris sendiri.")
+        if len(refs_entries) < 3:
+            add("High", f"Referensi hanya {len(refs_entries)} entri (minimum 3).")
+        elif len(refs_entries) > 7:
+            add("Medium", f"Referensi {len(refs_entries)} entri (maksimum 7).")
+        for line_no, entry in refs_entries:
+            if len(re.findall(r"https?://", entry)) > 1:
+                add("Medium", f"Baris {line_no}: lebih dari satu referensi dalam satu baris, pisahkan.")
+            if not URL.search(entry):
+                add("High", f"Baris {line_no}: referensi tanpa URL.")
+            if not YEAR.search(entry):
+                add("Medium", f"Baris {line_no}: referensi tanpa tahun.")
 
     # --- Placeholder yang tertinggal (mis. [Nama], [Gelar], [URL sumber]) ---
     placeholder_hits = re.findall(r"\[[^\[\]\n]+\](?!\()", "\n".join(raw_lines))
@@ -302,11 +374,12 @@ def main():
         sample = ", ".join(sorted(set(placeholder_hits))[:5])
         add("High", f"Placeholder tertinggal di artikel: {sample}. Isi dengan data asli sebelum dibuat .docx.")
 
-    # --- Gaya: kata ganti dan caption tabel ---
-    for i, l in enumerate(raw_lines):
-        if re.search(r"\bAnda\b", l):
-            add("Low", f"Baris {i + 1}: pakai 'kamu' atau 'kita', bukan 'Anda'.")
-            break
+    # --- Gaya: SOCS wajib kamu/kita; Bekasi bebas (mayoritas sampel pakai Anda) ---
+    if not bekasi:
+        for i, l in enumerate(raw_lines):
+            if re.search(r"\bAnda\b", l):
+                add("Low", f"Baris {i + 1}: pakai 'kamu' atau 'kita', bukan 'Anda'.")
+                break
     for i, l in enumerate(raw_lines):
         if re.match(r"^\s*Table\s+\d+[.:]", l):
             add("Low", f"Baris {i + 1}: caption tabel 'Table N.' tidak diatur, sebaiknya dihapus.")
@@ -349,7 +422,11 @@ def main():
             add("Medium", f"Keyword '{kw}' tidak muncul di artikel.")
     if keywords:
         main_kw = keywords[0].lower()
-        if not any(main_kw in h[1].lower() for h in h2h3 if h[0] == 2):
+        if bekasi:
+            heads = headings + [(0, t, n) for n, t in prose if BOLD_LEAD.match(t)]
+            if not any(main_kw in h[1].lower() for h in heads):
+                add("Medium", f"Keyword utama '{keywords[0]}' belum ada di salah satu subjudul.")
+        elif not any(main_kw in h[1].lower() for h in h2h3 if h[0] == 2):
             add("Medium", f"Keyword utama '{keywords[0]}' belum ada di salah satu subjudul H2.")
 
     # --- Kata absolut (overclaim): Low, minta diperhalus atau diberi sumber yang sekuat itu ---
@@ -390,9 +467,12 @@ def main():
     # --- Laporan ---
     order = {"High": 0, "Medium": 1, "Low": 2}
     findings.sort(key=lambda x: order[x[0]])
+    print(f"Target     : {args.target} ({'BINUS @Bekasi CSSE' if bekasi else 'SOCS BINUS'})")
     print(f"Judul      : {title}")
     print(f"Kata       : {word_count} (semua teks, seperti Word)")
-    print(f"Subjudul   : {len(h2h3)} (H2/H3)")
+    n_sub = (len([h for h in headings if h[0] in (1, 2, 3)])
+             + len([t for _, t in prose if BOLD_LEAD.match(t)])) if bekasi else len(h2h3)
+    print(f"Subjudul   : {n_sub} ({'H1/H2/H3+bold' if bekasi else 'H2/H3'})")
     print(f"Figure     : {len(captions)}")
     print(f"Tabel      : {table_count}")
     print(f"Referensi  : {len(refs_entries)}")

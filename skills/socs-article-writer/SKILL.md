@@ -1,22 +1,29 @@
 ---
 name: socs-article-writer
-description: Membantu menulis, merancang, memvalidasi, dan membuat file Word (.docx) untuk artikel explainer teknologi Bahasa Indonesia di website SOCS BINUS (socs.binus.ac.id/category/article). Gunakan saat user ingin membuat, menulis, mengecek, atau mengubah artikel SOCS, BINUS, atau draft artikel teknologi yang akan diajukan ke redaksi.
+description: Membantu menulis, merancang, memvalidasi, dan membuat file Word (.docx) untuk artikel explainer teknologi Bahasa Indonesia di website SOCS BINUS (socs.binus.ac.id/category/article) dan BINUS @Bekasi CSSE (binus.ac.id/bekasi/category/article/computer-science-software-engineering). Gunakan saat user ingin membuat, menulis, mengecek, atau mengubah artikel SOCS, BINUS, Bekasi, atau draft artikel teknologi yang akan diajukan ke redaksi.
 ---
 
-# SOCS Article Writer
+# SOCS & Bekasi Article Writer
 
-Skill ini membantu user menyusun artikel untuk website SOCS BINUS dari nol sampai file Word siap ditinjau. Artikel terbit tetap dinilai dan disetujui manusia. Skill tidak mempublikasikan apa pun.
+Skill ini membantu user menyusun artikel untuk website SOCS BINUS dan kanal BINUS @Bekasi Computer Science – Software Engineering, dari nol sampai file Word siap ditinjau. Artikel terbit tetap dinilai dan disetujui manusia. Skill tidak mempublikasikan apa pun.
 
-Aturan lengkap ada di `references/aturan.md`. Gaya menulis anti-slop ada di `references/gaya-menulis.md`. Contoh artikel terbit ada di `references/pola-artikel-terbit.md`. Template Markdown ada di `assets/template.md`. Semua path di bawah relatif terhadap folder skill ini.
+Aturan lengkap ada di `references/aturan.md` (target SOCS). Override target Bekasi ada di `references/target-bekasi.md`. Gaya menulis anti-slop ada di `references/gaya-menulis.md`. Contoh artikel terbit ada di `references/pola-artikel-terbit.md` (SOCS) dan `references/target-bekasi.md` (Bekasi). Template Markdown: `assets/template.md` (SOCS), `assets/template-bekasi.md` (Bekasi). Semua path di bawah relatif terhadap folder skill ini.
+
+## 0. Pilih target (wajib sebelum intake)
+
+- Tanyakan target redaksi: SOCS atau Bekasi. Default SOCS jika user tidak menyebut.
+- Target Bekasi: artikel untuk `binus.ac.id/bekasi/category/article/computer-science-software-engineering`, ikut override di `references/target-bekasi.md`.
+- Perbedaan kunci Bekasi: sapaan `Anda` boleh, tanpa baris byline (tidak perlu menanyakan nama penulis), figure `Gambar 1. ... (sumber: URL)`, judul bebas maks 15 kata / 110 karakter, subjudul min 2, paragraf min 3 kalimat, referensi bebas 3–8 entri tanpa tahun wajib.
+- Validator dan builder mengikuti target: tambah `--target bekasi` di `scripts/validate_article.py`, mulai draft dari `assets/template-bekasi.md`.
 
 ## Langkah kerja
 
 ### 1. Intake (wajib sebelum menulis apa pun)
 
-Jangan mulai menulis sebelum informasi wajib berikut ada. Informasi penulis bersifat wajib dan tidak boleh diisi dari memori, contoh, atau placeholder:
+Jangan mulai menulis sebelum informasi wajib berikut ada:
 
-- Penulis: nama lengkap, gelar, dan jabatan. Cek dulu `penulis.local.md` di root workspace. Jika ada, tampilkan isinya ke user dan minta konfirmasi. Jika tidak ada, tanyakan lalu simpan jawabannya ke `penulis.local.md` (file ini di-ignore git, jangan di-commit).
-- Topik: satu teknologi atau konsep. Jika user belum punya, tawarkan 2-3 pilihan dari klaster yang sesuai.
+- Target SOCS: penulis wajib (nama lengkap, gelar, jabatan; tidak boleh dari memori, contoh, atau placeholder). Cek dulu `penulis.local.md` di root workspace. Jika ada, tampilkan isinya ke user dan minta konfirmasi. Jika tidak ada, tanyakan lalu simpan jawabannya ke `penulis.local.md` (file ini di-ignore git, jangan di-commit).
+- Target Bekasi: penulis tidak perlu ditanya (tanpa baris byline; 9/9 sampel tanpa byline, author = `editorarticle`).
 
 Informasi berikut boleh ditanyakan bersamaan atau dilewati jika user sudah memberikannya:
 
@@ -26,11 +33,12 @@ Informasi berikut boleh ditanyakan bersamaan atau dilewati jika user sudah membe
 - Gambar: sumber gambar jika user punya. Jika tidak, usulkan 2-3 gambar yang bisa dicari dari sumber resmi, atau ilustrasi AI-generated yang diberi label.
 - Folder kerja untuk draft dan gambar, misalnya `drafts/<judul>/`.
 
-Jika penulis belum diketahui, berhenti dan tanyakan. Jangan menulis `[Nama]` atau `[Gelar]` ke dalam artikel.
+Jika target SOCS dan penulis belum diketahui, berhenti dan tanyakan. Jangan menulis `[Nama]` atau `[Gelar]` ke dalam artikel.
 
 ### 2. Cek duplikat
 
-- Ambil daftar judul dari https://socs.binus.ac.id/category/article/ dengan web_fetch. Telusuri halaman berikutnya lewat link pagination sampai topik yang sama ditemukan atau daftar habis. Situs ini punya banyak halaman, jadi tidak semua perlu dibuka.
+- Target SOCS: ambil daftar judul dari https://socs.binus.ac.id/category/article/ dengan web_fetch. Telusuri halaman berikutnya lewat link pagination sampai topik yang sama ditemukan atau daftar habis. Situs ini punya banyak halaman, jadi tidak semua perlu dibuka.
+- Target Bekasi: ambil daftar judul dari https://binus.ac.id/bekasi/category/article/computer-science-software-engineering/ (42+ halaman per Okt 2026; cek halaman awal + pencarian topik, tidak perlu semua).
 - Cek juga folder `published/` dan `submitted/` di workspace jika ada.
 - Jika ada topik yang mirip, beri tahu user dan tanyakan sebelum lanjut.
 
@@ -57,26 +65,28 @@ Sebelum menulis, buat `drafts/<judul>/klaim.md` berisi tabel:
 
 ### 4. Outline
 
-Susun kerangka berdasarkan urutan di `references/aturan.md` bagian 4 dan pola di `references/pola-artikel-terbit.md`. Tampilkan outline singkat ke user. Lanjut ke draft kecuali user minta meninjau outline dulu.
+- Target SOCS: kerangka berdasarkan urutan di `references/aturan.md` bagian 4 dan pola di `references/pola-artikel-terbit.md`.
+- Target Bekasi: esai opini bebas berdasarkan pola di `references/target-bekasi.md` (judul → gambar → hook → 2–6 subjudul → referensi). Tampilkan outline singkat ke user. Lanjut ke draft kecuali user minta meninjau outline dulu.
 
 ### 5. Tulis draft (Markdown)
 
 - Bahasa Indonesia ragam populer-ilmiah. Istilah teknis tetap Inggris.
 - Terapkan gaya anti-slop dari `references/gaya-menulis.md` saat menulis: langsung ke inti, tanpa kontras biner gimmick, tanpa throat-clearing, tanpa intensifier kosong, aktif voice dengan pelaku jelas, ritme kalimat bervariasi.
 - Target 600-700 kata. Batas keras 500-800.
-- Mulai dari `assets/template.md`, lalu isi sesuai outline.
+- Target SOCS: mulai dari `assets/template.md`, isi sesuai outline; format figure (`Figure N.` + baris `(URL)`), byline satu baris, dan referensi persis seperti `references/aturan.md`.
+- Target Bekasi: mulai dari `assets/template-bekasi.md`, isi sesuai outline; sapaan `Anda` boleh; figure `Gambar 1. ... (sumber: URL)`; tanpa byline; referensi bebas 3–8 entri (lihat `references/target-bekasi.md`).
 - Simpan draft sebagai `drafts/<judul>/<judul>.md`, dengan judul tanpa tanda `:` untuk nama file. Simpan gambar di folder yang sama, lalu tulis path relatif di Markdown, misalnya `![](figure-1.png)`.
-- Format figure (caption `Figure N.` dengan sumber di baris berikutnya), byline (satu baris), dan referensi harus persis seperti di `references/aturan.md`.
 
 ### 6. Validasi
 
-Jalankan validator dari folder skill ini:
+Jalankan validator dari folder skill ini (tambah `--target bekasi` untuk Bekasi):
 
-    python scripts/validate_article.py "<path draft>.md" --keywords "keyword1,keyword2" --klaim "drafts/<judul>/klaim.md"
+    python scripts/validate_article.py "<path draft>.md" --target socs --keywords "keyword1,keyword2" --klaim "drafts/<judul>/klaim.md"
+    python scripts/validate_article.py "<path draft>.md" --target bekasi --keywords "keyword1,keyword2" --klaim "drafts/<judul>/klaim.md"
 
 - Perbaiki semua temuan High dan Medium, lalu jalankan ulang sampai tidak ada High.
 - Temuan Low dilaporkan ke user, dan diperbaiki jika mudah.
-- Validator memeriksa aturan mekanis, angka terhadap buku klaim, kata absolut, pola gaya anti-slop (em dash, kontras biner gimmick, throat-clearing, meta-komentar, declaratif kosong, klaim melang, intensifier kosong), panjang paragraf (minimal 5 kalimat, aturan.md bagian 4), dan rujukan figure di kalimat (aturan.md bagian 6). Ia tidak bisa memastikan sumber itu benar. Kebenaran klaim tetap dipastikan lewat buku klaim dan dicek manusia.
+- Validator SOCS memeriksa aturan mekanis, angka terhadap buku klaim, kata absolut, pola gaya anti-slop (em dash, kontras biner gimmick, throat-clearing, meta-komentar, declaratif kosong, klaim melang, intensifier kosong), panjang paragraf (minimal 5 kalimat, aturan.md bagian 4), dan rujukan figure di kalimat (aturan.md bagian 6). Mode Bekasi memeriksa override `references/target-bekasi.md`: paragraf minimal 3 kalimat, subjudul minimal 2 (level bebas + bold-lead), tanpa cek `Anda`/byline/rujukan figure, tahun referensi opsional. Ia tidak bisa memastikan sumber itu benar. Kebenaran klaim tetap dipastikan lewat buku klaim dan dicek manusia.
 
 ### 7. Buat file Word
 

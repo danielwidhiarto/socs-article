@@ -1,6 +1,6 @@
-# Aturan Artikel SOCS BINUS
+# Aturan Artikel SOCS BINUS (target default)
 
-Ini satu-satunya sumber aturan untuk skill ini. Contoh artikel terbit ada di `pola-artikel-terbit.md` dan hanya perlu dibaca saat butuh contoh. Format dokumen Word mengikuti artikel acuan *Agentic Coding* (lihat bagian 15), dengan kertas A4.
+Target default: SOCS (`socs.binus.ac.id/category/article`). Untuk kanal Bekasi CSSE (`binus.ac.id/bekasi/.../computer-science-software-engineering`), aturan ini dioverride oleh `target-bekasi.md`: sapaan `Anda` boleh, tanpa byline, figure `Gambar N.`, judul bebas maks 15 kata / 110 karakter, subjudul min 2, paragraf min 3 kalimat, referensi bebas 3–8 entri. Validator: `--target socs|bekasi`.
 
 Tingkat keparahan: High = artikel gagal validasi. Medium = wajib diperbaiki. Low = saran.
 

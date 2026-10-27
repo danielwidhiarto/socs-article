@@ -40,9 +40,9 @@ CAPTION_PT = 11
 
 RE_IMAGE = re.compile(r"^!\[[^\]]*\]\(([^)]+)\)(?:\{([^}]*)\})?$")
 RE_IMAGE_SIZE = re.compile(r"(w|h)=([\d.]+)cm")
-RE_CAPTION = re.compile(r"^Figure\s+\d+\.\s")
-RE_SOURCE = re.compile(r"^\((https?://\S+|AI Generated)\)$")
-RE_TABLE_SEP = re.compile(r"^\|?\s*:?-{3,}")
+RE_CAPTION_ANY = re.compile(r"^(?:Figure|Gambar)\s+(\d+)\.\s(.*)$", re.IGNORECASE)
+RE_SOURCE_ANY = re.compile(r"^\(\s*(?:sumber:\s*)?(https?://\S+|AI Generated)\)$", re.IGNORECASE)
+RE_INLINE_SOURCE = re.compile(r"^(.*?)\(\s*sumber:\s*(https?://\S+?)\)\s*$", re.IGNORECASE)
 RE_BULLET = re.compile(r"^[-*+]\s+(.*)$")
 RE_NUMBER = re.compile(r"^\d+\.\s+(.*)$")
 RE_INLINE = re.compile(r"(\*\*.+?\*\*|(?<!\*)\*[^*\s][^*]*?\*(?!\*)|https?://[^\s)]+)")
@@ -97,13 +97,18 @@ def parse_blocks(lines):
         i += 1
         if not s:
             continue
-        if s.startswith("# "):
-            blocks.append(("title", s[2:].strip()))
-            continue
-        if s.startswith("## "):
-            heading = s[3:].strip()
-            in_refs = heading.lower() == "referensi"
-            blocks.append(("heading", heading))
+        m_head = re.match(r"^(#{1,6})\s+(.*)$", s)
+        if m_head and (len(m_head.group(1)) > 1 or not any(k == "title" for k, _ in blocks)):
+            # '# ' pertama = judul; '# '/lainnya setelah itu = subjudul (pola Bekasi).
+            level = len(m_head.group(1))
+            if level == 1 and any(k == "title" for k, _ in blocks):
+                blocks.append(("heading", m_head.group(2).strip()))
+            elif level == 1:
+                blocks.append(("title", m_head.group(2).strip()))
+            else:
+                heading = m_head.group(2).strip()
+                in_refs = heading.lower() in ("referensi", "references", "daftar referensi", "daftar pustaka")
+                blocks.append(("heading", heading))
             continue
         if s.startswith("Penulis:"):
             blocks.append(("byline", s))
@@ -112,11 +117,20 @@ def parse_blocks(lines):
         if m:
             blocks.append(("image", (m.group(1), m.group(2) or "")))
             continue
-        if RE_CAPTION.match(s):
-            blocks.append(("caption", s))
+        m = RE_CAPTION_ANY.match(s)
+        if m:
+            tail = m.group(2).strip()
+            inline = RE_INLINE_SOURCE.match(tail)
+            if inline:
+                blocks.append(("caption", f"Gambar {m.group(1)}. {inline.group(1).strip()}"))
+                blocks.append(("source", f"(sumber: {inline.group(2)})"))
+            else:
+                # Normalisasi label ke 'Gambar N.' agar konsisten dengan redaksi Bekasi.
+                blocks.append(("caption", f"Gambar {m.group(1)}. {tail}"))
             continue
-        if RE_SOURCE.match(s):
-            blocks.append(("source", s))
+        if RE_SOURCE_ANY.match(s):
+            url = RE_SOURCE_ANY.match(s).group(1)
+            blocks.append(("source", f"(sumber: {url})" if not s.lower().startswith("(sumber:") else s))
             continue
         if s.startswith("|"):
             rows = [s]
