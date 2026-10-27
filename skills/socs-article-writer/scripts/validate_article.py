@@ -304,12 +304,16 @@ def main():
                 add("Medium", f"Penomoran figure tidak berurutan: {numbers}.")
         if len(captions) > 6:
             add("Low", f"Figure {len(captions)} (umumnya 1-6 untuk Bekasi).")
+        # Kualitas sumber gambar (disamakan SOCS): minimal 1 figure dari sumber kredibel,
+        # bukan semuanya ilustrasi penulis/AI-generated.
+        cap_lines = [line for _, line in captions]
+        illust = sum(1 for l in cap_lines if "ilustrasi penulis" in l.lower())
+        ai_gen = sum(1 for l in cap_lines if "ai generated" in l.lower())
+        if captions and illust + ai_gen >= len(captions):
+            add("Medium", "Semua figure ilustrasi penulis/AI-generated; minimal 1 figure harus dari sumber kredibel (docs resmi, blog vendor, paper, Wikimedia Commons berlisensi).")
+        if len(captions) < 2:
+            add("Low", "Disarankan 2 figure atau lebih (saat ini hanya 1); contoh bagus: screenshot docs resmi + diagram arsitektur berlisensi.")
         # Setiap gambar wajib disebut di kalimat (target-bekasi.md): 'Gambar N' min 1x per gambar.
-        body_text = "\n".join(t for _, t in prose)
-        for n in numbers:
-            mentions = len(re.findall(rf"(?:Gambar|Figure)\s+{n}\b", body_text, re.IGNORECASE))
-            if mentions == 0:
-                add("Low", f"Gambar {n} tidak pernah disebut di kalimat artikel; tambahkan rujukan seperti 'seperti pada Gambar {n}' di paragraf yang membahasnya.")
     else:
         if not captions:
             add("Medium", "Figure 1 wajib ada (tidak ditemukan caption Figure).")

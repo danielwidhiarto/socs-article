@@ -45,13 +45,19 @@ dan 20 judul lain (Agustus 2024–2026).
 | Pasukan Agen AI | Anda | 1, tanpa caption | 7 bare URL | 0 heading, 2 bold-lead | Preseden subjudul bold-lead; ada angka % |
 | Kuantum | kamu | 1, tanpa caption | 6 bare URL | 5 (`#`) | Preseden sapaan `kamu`; ada angka Rp/$ |
 
-## Aturan figure Bekasi CSSE (yang divalidasi)
+## Aturan figure Bekasi CSSE (yang divalidasi; standar kualitas disamakan SOCS)
 
 - `Gambar 1` wajib (Medium jika tidak ada). `Figure N.` tetap diterima.
 - Caption boleh satu baris dengan sumber inline: `Gambar 1. Deskripsi (sumber: https://...)`.
 - Tanpa sumber inline, baris berikutnya harus `(URL)` atau `(sumber: URL)` (Low jika tidak ada, bukan Medium).
 - Penomoran dari 1 dan berurutan (Medium jika tidak).
 - Lebih dari 6 figure: Low. Satu figure tidak ditegur.
+- Kualitas sumber (Medium jika dilanggar): minimal 1 figure harus dari sumber kredibel
+  (screenshot/docs resmi, blog vendor besar, paper, diagram Wikimedia Commons berlisensi),
+  bukan semuanya "ilustrasi penulis" atau AI-generated. Ilustrasi penulis tetap boleh
+  sebagai pendamping, dengan caption jujur dan URL sumber fakta yang digambarkan.
+- Disarankan 2 figure atau lebih (Low jika hanya 1): pola bagus = 1 visual asli dari sumber
+  (screenshot/diagram) + 1 ilustrasi penulis atau diagram berlisensi sebagai pembanding.
 
 ## Aturan referensi Bekasi CSSE (yang divalidasi)
 

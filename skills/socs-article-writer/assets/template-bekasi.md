@@ -1,7 +1,7 @@
 # [Judul Bebas, Boleh Berupa Pertanyaan, Maks 15 Kata / 110 Karakter]
 
 ![](gambar-1.png)
-Gambar 1. [Deskripsi singkat gambar] (sumber: https://url-sumber-gambar)
+Gambar 1. [Deskripsi singkat gambar ASLI dari sumber: screenshot docs resmi, diagram vendor/paper, atau Commons berlisensi] (sumber: https://url-sumber-gambar)
 
 Hai, *Software Engineers*!
 
@@ -16,7 +16,7 @@ Hai, *Software Engineers*!
 [Poin boleh paragraf atau bullet `- ...`. Contoh nyata: produk, perusahaan, atau kasus di Indonesia jika relevan.]
 
 ![](gambar-2.png)
-Gambar 2. [Deskripsi gambar pendukung, opsional] (sumber: https://url-sumber-gambar)
+Gambar 2. [Gambar pendukung: visual asli kedua ATAU ilustrasi penulis dengan caption jujur "ilustrasi penulis"] (sumber: https://url-sumber-gambar-atau-fakta)
 
 ## [Subjudul 3: dampak, tantangan, atau penutup]
 
